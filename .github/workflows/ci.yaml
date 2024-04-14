@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CheckOut
+        uses: actions/checkout@v4
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Build (with Check/Test)
+        run: gradle build
+  java8:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CheckOut
+        uses: actions/checkout@v4
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 8
+          cache: gradle
+      - name: Fix Dep
+        run: sed -i -e 's/6.25.0/6.13.0/' gradle/libs.versions.toml
+      - name: Fix JavaLanguageVersion
+        run: sed -i -e 's/JavaLanguageVersion\.of(\d{1,2})/JavaLanguageVersion.of(8)/' lib/build.gradle.kts
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Test
+        run: gradle test
