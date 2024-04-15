@@ -321,8 +321,8 @@ public class MeshCoord implements Comparable<MeshCoord> {
    *
    * <pre>{@code
    * assert new MeshCoord(0, 0, 1).nextDown(MeshUnit.ONE).equals(new MeshCoord(0, 0, 0));
-   * assert new MeshCoord(0, 1, 0).nextDown(MeshUnit.ONE).equals(new MeshCoord(0, 0, 0));
-   * assert new MeshCoord(1, 0, 0).nextDown(MeshUnit.ONE).equals(new MeshCoord(0, 0, 0));
+   * assert new MeshCoord(0, 1, 0).nextDown(MeshUnit.ONE).equals(new MeshCoord(0, 0, 9));
+   * assert new MeshCoord(1, 0, 0).nextDown(MeshUnit.ONE).equals(new MeshCoord(0, 7, 9));
    * }</pre>
    *
    * <pre>{@code
