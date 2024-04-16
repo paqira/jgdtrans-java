@@ -44,17 +44,19 @@ public class Parameter {
   /**
    * Makes a {@link Parameter}.
    *
-   * @param latitude The latitude parameter [sec].
-   * @param longitude The latitude parameter [sec].
-   * @param altitude The altitude parameter [m].
-   *     <h4>Example</h4>
-   *     <pre>{@code
+   * <h4>Example</h4>
+   *
+   * <pre>{@code
    * Parameter param = new Parameter(1.0, 2.0, 3.0);
    *
    * assert param.latitude() == 1.0;
    * assert param.longitude() == 2.0;
    * assert param.altitude() == 3.0;
    * }</pre>
+   *
+   * @param latitude The latitude parameter [sec].
+   * @param longitude The latitude parameter [sec].
+   * @param altitude The altitude parameter [m].
    */
   public Parameter(final double latitude, final double longitude, final double altitude) {
     this.latitude = latitude;
