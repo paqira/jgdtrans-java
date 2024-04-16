@@ -247,10 +247,6 @@ public class MeshCoord implements Comparable<MeshCoord> {
     }
   }
 
-  protected boolean testMeshUnitFive() {
-    return this.third == 0 || this.third == 5;
-  }
-
   private double toDegree() {
     return (double) this.first + (double) this.second / 8.0 + (double) this.third / 80.0;
   }
