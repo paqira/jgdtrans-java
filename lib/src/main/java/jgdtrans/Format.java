@@ -66,13 +66,13 @@ public enum Format {
    * <h4>Example</h4>
    *
    * <pre>{@code
-   * assert Format.TKY2JGD.unit().equals(MeshUnit.ONE);
-   * assert Format.SemiDynaEXE.unit().equals(MeshUnit.FIVE);
+   * assert Format.TKY2JGD.meshUnit().equals(MeshUnit.ONE);
+   * assert Format.SemiDynaEXE.meshUnit().equals(MeshUnit.FIVE);
    * }</pre>
    *
    * @return the unit of the format, not null.
    */
-  public MeshUnit unit() {
+  public MeshUnit meshUnit() {
     switch (this) {
       case TKY2JGD:
       case PatchJGD:

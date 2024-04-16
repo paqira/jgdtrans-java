@@ -179,11 +179,11 @@ public class Point {
    * assert point.toMeshcode(MeshUnit.FIVE) == 54401005;
    * }</pre>
    *
-   * @param unit the unit of mesh, may not be null.
+   * @param meshUnit the unit of mesh, may not be null.
    * @return a meshcode, not null.
    */
-  public int toMeshcode(final MeshUnit unit) {
-    return this.meshNode(unit).toMeshcode();
+  public int toMeshcode(final MeshUnit meshUnit) {
+    return this.meshNode(meshUnit).toMeshcode();
   }
 
   /**
@@ -201,12 +201,12 @@ public class Point {
    * );
    * }</pre>
    *
-   * @param unit the unit of mesh, may not be null.
+   * @param meshUnit the unit of mesh, may not be null.
    * @return A {@link MeshNode} instance, not null.
    * @see MeshNode#ofPoint(Point, MeshUnit)
    */
-  public MeshNode meshNode(final MeshUnit unit) {
-    return MeshNode.ofPoint(this, unit);
+  public MeshNode meshNode(final MeshUnit meshUnit) {
+    return MeshNode.ofPoint(this, meshUnit);
   }
 
   /**
@@ -236,12 +236,12 @@ public class Point {
    * ));
    * }</pre>
    *
-   * @param unit the unit of mesh, may not be null.
+   * @param meshUnit the unit of mesh, may not be null.
    * @return A {@link MeshCell} instance, not null.
    * @see MeshCell#ofPoint(Point, MeshUnit)
    */
-  public MeshCell meshCell(final MeshUnit unit) {
-    return MeshCell.ofPoint(this, unit);
+  public MeshCell meshCell(final MeshUnit meshUnit) {
+    return MeshCell.ofPoint(this, meshUnit);
   }
 
   protected static double normalizeLatitude(final double t) {

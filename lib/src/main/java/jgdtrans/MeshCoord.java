@@ -90,14 +90,14 @@ public class MeshCoord implements Comparable<MeshCoord> {
     return 0 <= third && third < 10;
   }
 
-  private static MeshCoord ofDegree(final double v, final MeshUnit unit) {
+  private static MeshCoord ofDegree(final double v, final MeshUnit meshUnit) {
     final int integer = (int) Math.floor(v);
 
     final int first = integer % 100;
     final int second = (int) Math.floor(8.0 * v) - 8 * integer;
     final int third = (int) Math.floor(80.0 * v) - 80 * integer - 10 * second;
 
-    switch (unit) { // Callee checks unit is not null
+    switch (meshUnit) { // Callee checks unit is not null
       case ONE:
         return new MeshCoord(first, second, third);
       case FIVE:
@@ -109,7 +109,7 @@ public class MeshCoord implements Comparable<MeshCoord> {
 
   /**
    * Makes the greatest {@link MeshCoord} instance less than the latitude {@code t} with {@code
-   * unit}.
+   * meshUnit}.
    *
    * <h4>Example</h4>
    *
@@ -124,11 +124,11 @@ public class MeshCoord implements Comparable<MeshCoord> {
    * }</pre>
    *
    * @param degree The latitude [deg] which satisfies {@code 0.0 <=} and {@code <= 66.666...}.
-   * @param unit The mesh unit, may not be null.
+   * @param meshUnit The mesh unit, may not be null.
    * @return A {@code MeshCoord} instance, not null.
    * @throws ValueOutOfRangeException If {@code degree} is out-of-range.
    */
-  public static MeshCoord ofLatitude(final double degree, final MeshUnit unit)
+  public static MeshCoord ofLatitude(final double degree, final MeshUnit meshUnit)
       throws ValueOutOfRangeException {
     double value = 3.0 * degree / 2.0;
     if ((Double.doubleToRawLongBits(degree) & 0b1L) == 0b1L) {
@@ -139,12 +139,12 @@ public class MeshCoord implements Comparable<MeshCoord> {
       throw new ValueOutOfRangeException("degree (latitude)");
     }
 
-    return MeshCoord.ofDegree(value, Objects.requireNonNull(unit, "unit"));
+    return MeshCoord.ofDegree(value, Objects.requireNonNull(meshUnit, "meshUnit"));
   }
 
   /**
    * Makes the greatest {@link MeshCoord} instance less than the longitude {@code t} with {@code
-   * unit}.
+   * meshUnit}.
    *
    * <h4>Example</h4>
    *
@@ -159,17 +159,17 @@ public class MeshCoord implements Comparable<MeshCoord> {
    * }</pre>
    *
    * @param degree The longitude [deg] which satisfies {@code 100.0 <=} and {@code <= 180.0}.
-   * @param unit The mesh unit, may not be null.
+   * @param meshUnit The mesh unit, may not be null.
    * @return A {@code MeshCoord} instance, not null.
    * @throws ValueOutOfRangeException If {@code degree} is out-of-range.
    */
-  public static MeshCoord ofLongitude(final double degree, final MeshUnit unit)
+  public static MeshCoord ofLongitude(final double degree, final MeshUnit meshUnit)
       throws ValueOutOfRangeException {
     if (degree < 100.0 || 180.0 < degree) {
       throw new ValueOutOfRangeException("degree (longitude)");
     }
 
-    return MeshCoord.ofDegree(degree, Objects.requireNonNull(unit, "unit"));
+    return MeshCoord.ofDegree(degree, Objects.requireNonNull(meshUnit, "meshUnit"));
   }
 
   /**
@@ -221,7 +221,7 @@ public class MeshCoord implements Comparable<MeshCoord> {
   }
 
   /**
-   * Returns {@code true} if {@code this} is compatible to the {@code unit}.
+   * Returns {@code true} if {@code this} is compatible to the {@code meshUnit}.
    *
    * <p>This always returns {@code true} if {@code unit} is {@link MeshUnit#ONE}.
    *
@@ -229,19 +229,19 @@ public class MeshCoord implements Comparable<MeshCoord> {
    *
    * <pre>{@code
    * MeshCoord coord = new MeshCoord(1, 2, 3);
-   * assert coord.isUnit(MeshUnit.ONE) == true;
-   * assert coord.isUnit(MeshUnit.FIVE) == false;
+   * assert coord.isMeshUnit(MeshUnit.ONE) == true;
+   * assert coord.isMeshUnit(MeshUnit.FIVE) == false;
    * }</pre>
    *
-   * @param unit The mesh unit.
-   * @return {@code true} if {@code this} is compatible to the {@code unit}.
+   * @param meshUnit The mesh unit.
+   * @return {@code true} if {@code this} is compatible to the {@code meshUnit}.
    */
-  public boolean isUnit(final MeshUnit unit) {
-    switch (Objects.requireNonNull(unit, "unit")) {
+  public boolean isMeshUnit(final MeshUnit meshUnit) {
+    switch (Objects.requireNonNull(meshUnit, "meshUnit")) {
       case ONE:
         return true;
       case FIVE:
-        return this.third % unit.integer() == 0;
+        return this.third % meshUnit.integer() == 0;
       default:
         throw new RuntimeException("UNREACHABLE");
     }
@@ -316,18 +316,18 @@ public class MeshCoord implements Comparable<MeshCoord> {
    * assert new MeshCoord(0, 7, 5).nextUp(MeshUnit.FIVE).equals(new MeshCoord(1, 0, 0));
    * }</pre>
    *
-   * @param unit The mesh unit, may not be null.
+   * @param meshUnit The mesh unit, may not be null.
    * @return The up-next {@link MeshCoord} instance, not null.
-   * @throws InvalidUnitException If {@code unit} is {@link MeshUnit#FIVE} although {@link
+   * @throws InvalidUnitException If {@code meshUnit} is {@link MeshUnit#FIVE} although {@link
    *     MeshCoord#third()} is either {@code 0} or {@code 5}.
    * @throws OverflowException If {@code this} is {@code MeshCoord(first=99, second=7, third=9)}.
    */
-  public MeshCoord nextUp(final MeshUnit unit) throws InvalidUnitException {
-    if (!this.isUnit(unit)) {
+  public MeshCoord nextUp(final MeshUnit meshUnit) throws InvalidUnitException {
+    if (!this.isMeshUnit(meshUnit)) {
       throw new InvalidUnitException();
     }
 
-    final int bound = MeshUnit.ONE.equals(unit) ? 9 : 5;
+    final int bound = MeshUnit.ONE.equals(meshUnit) ? 9 : 5;
 
     if (this.third == bound) {
       if (this.second == 7) {
@@ -338,7 +338,7 @@ public class MeshCoord implements Comparable<MeshCoord> {
       }
       return new MeshCoord(this.first, this.second + 1, 0);
     }
-    return new MeshCoord(this.first, this.second, this.third + unit.integer());
+    return new MeshCoord(this.first, this.second, this.third + meshUnit.integer());
   }
 
   /**
@@ -358,18 +358,18 @@ public class MeshCoord implements Comparable<MeshCoord> {
    * assert new MeshCoord(1, 0, 0).nextDown(MeshUnit.FIVE).equals(new MeshCoord(0, 7, 5));
    * }</pre>
    *
-   * @param unit The mesh unit, may not be null.
+   * @param meshUnit The mesh unit, may not be null.
    * @return The up-next {@link MeshCoord} instance, not null.
-   * @throws InvalidUnitException If {@code unit} is {@link MeshUnit#FIVE} although {@link
+   * @throws InvalidUnitException If {@code meshUnit} is {@link MeshUnit#FIVE} although {@link
    *     MeshCoord#third()} is either {@code 0} or {@code 5}.
    * @throws OverflowException If {@code this} is {@code MeshCoord(first=0, second=0, third=0)}.
    */
-  public MeshCoord nextDown(final MeshUnit unit) throws InvalidUnitException {
-    if (!this.isUnit(unit)) {
+  public MeshCoord nextDown(final MeshUnit meshUnit) throws InvalidUnitException {
+    if (!this.isMeshUnit(meshUnit)) {
       throw new InvalidUnitException();
     }
 
-    final int bound = MeshUnit.ONE.equals(unit) ? 9 : 5;
+    final int bound = MeshUnit.ONE.equals(meshUnit) ? 9 : 5;
 
     if (this.third == 0) {
       if (this.second == 0) {
@@ -380,7 +380,7 @@ public class MeshCoord implements Comparable<MeshCoord> {
       }
       return new MeshCoord(this.first, this.second - 1, bound);
     }
-    return new MeshCoord(this.first, this.second, this.third - unit.integer());
+    return new MeshCoord(this.first, this.second, this.third - meshUnit.integer());
   }
 
   @Override

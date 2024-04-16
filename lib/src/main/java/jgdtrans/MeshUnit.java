@@ -16,7 +16,7 @@
 package jgdtrans;
 
 /**
- * The mesh unit (unit shortly), or approximate length of cell's edge.
+ * The mesh unit, or approximate length of cell's edge.
  *
  * <h2>Example</h2>
  *

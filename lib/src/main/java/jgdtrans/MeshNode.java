@@ -134,14 +134,14 @@ public class MeshNode {
    * }</pre>
    *
    * @param point The point
-   * @param unit the mesh unit
+   * @param meshUnit the mesh unit
    * @return A {@link MeshNode} instance.
    * @see Point#meshNode(MeshUnit)
    */
-  public static MeshNode ofPoint(final Point point, final MeshUnit unit)
+  public static MeshNode ofPoint(final Point point, final MeshUnit meshUnit)
       throws ValueOutOfRangeException {
-    final MeshCoord latitude = MeshCoord.ofLatitude(point.latitude, unit);
-    final MeshCoord longitude = MeshCoord.ofLongitude(point.longitude, unit);
+    final MeshCoord latitude = MeshCoord.ofLatitude(point.latitude, meshUnit);
+    final MeshCoord longitude = MeshCoord.ofLongitude(point.longitude, meshUnit);
 
     return new MeshNode(latitude, longitude);
   }
@@ -181,9 +181,9 @@ public class MeshNode {
   }
 
   /**
-   * Returns {@code true} if {@code this} is compatible to the {@code unit}.
+   * Returns {@code true} if {@code this} is compatible to the {@code meshUnit}.
    *
-   * <p>This always returns {@code true} if {@code unit} is {@link MeshUnit#ONE}.
+   * <p>This always returns {@code true} if {@code meshUnit} is {@link MeshUnit#ONE}.
    *
    * <h4>Example</h4>
    *
@@ -193,11 +193,11 @@ public class MeshNode {
    * assert node.isUnit(MeshUnit.FIVE) == false;
    * }</pre>
    *
-   * @param unit The mesh unit.
+   * @param meshUnit The mesh unit.
    * @return {@code true} if {@code this} is compatible to the {@code unit}.
    */
-  public boolean isUnit(final MeshUnit unit) {
-    return this.latitude.isUnit(unit) && this.longitude.isUnit(unit);
+  public boolean isMeshUnit(final MeshUnit meshUnit) {
+    return this.latitude.isMeshUnit(meshUnit) && this.longitude.isMeshUnit(meshUnit);
   }
 
   /**

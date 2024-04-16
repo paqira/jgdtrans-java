@@ -410,7 +410,7 @@ public class Transformer {
    */
   public Correction forwardCorrection(final Point point) throws ParameterNotFoundException {
     final MeshCell cell =
-        MeshCell.ofPoint(Objects.requireNonNull(point, "point"), this.format.unit());
+        MeshCell.ofPoint(Objects.requireNonNull(point, "point"), this.format.meshUnit());
     final Quadruple quadruple = this.parameterQuadruple(cell);
     final MeshCell.Position position = cell.position(point);
 
@@ -543,7 +543,7 @@ public class Transformer {
     for (int i = 0; i < ITERATION; i++) {
       final Point current = new Point(yn, xn, 0.0);
 
-      final MeshCell cell = MeshCell.ofPoint(current, this.format.unit());
+      final MeshCell cell = MeshCell.ofPoint(current, this.format.meshUnit());
       final Quadruple quadruple = parameterQuadruple(cell);
       final MeshCell.Position position = cell.position(current);
 
