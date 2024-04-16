@@ -220,6 +220,33 @@ public class MeshCoord implements Comparable<MeshCoord> {
     return this.third;
   }
 
+  /**
+   * Returns {@code true} if {@code this} is compatible to the {@code unit}.
+   *
+   * <p>This always returns {@code true} if {@code unit} is {@link MeshUnit#ONE}.
+   *
+   * <h4>Example</h4>
+   *
+   * <pre>{@code
+   * MeshCoord coord = new MeshCoord(1, 2, 3);
+   * assert coord.isUnit(MeshUnit.ONE) == true;
+   * assert coord.isUnit(MeshUnit.FIVE) == false;
+   * }</pre>
+   *
+   * @param unit The mesh unit.
+   * @return {@code true} if {@code this} is compatible to the {@code unit}.
+   */
+  public boolean isUnit(final MeshUnit unit) {
+    switch (Objects.requireNonNull(unit, "unit")) {
+      case ONE:
+        return true;
+      case FIVE:
+        return this.third % unit.integer() == 0;
+      default:
+        throw new RuntimeException("UNREACHABLE");
+    }
+  }
+
   protected boolean testMeshUnitFive() {
     return this.third == 0 || this.third == 5;
   }
@@ -296,7 +323,7 @@ public class MeshCoord implements Comparable<MeshCoord> {
    * @throws OverflowException If {@code this} is {@code MeshCoord(first=99, second=7, third=9)}.
    */
   public MeshCoord nextUp(final MeshUnit unit) throws InvalidUnitException {
-    if (MeshUnit.FIVE.equals(Objects.requireNonNull(unit, "unit")) && !this.testMeshUnitFive()) {
+    if (!this.isUnit(unit)) {
       throw new InvalidUnitException();
     }
 
@@ -338,7 +365,7 @@ public class MeshCoord implements Comparable<MeshCoord> {
    * @throws OverflowException If {@code this} is {@code MeshCoord(first=0, second=0, third=0)}.
    */
   public MeshCoord nextDown(final MeshUnit unit) throws InvalidUnitException {
-    if (MeshUnit.FIVE.equals(Objects.requireNonNull(unit, "unit")) && !this.testMeshUnitFive()) {
+    if (!this.isUnit(unit)) {
       throw new InvalidUnitException();
     }
 

@@ -88,24 +88,14 @@ public class MeshCell {
     Objects.requireNonNull(northEast, "northEast");
     Objects.requireNonNull(unit, "unit");
 
-    if (MeshUnit.FIVE.equals(unit)) {
-      if (!southWest.latitude.testMeshUnitFive()) {
-        throw new InvalidUnitException("longitude of southWest");
-      } else if (!southWest.longitude.testMeshUnitFive()) {
-        throw new InvalidUnitException("latitude of southWest");
-      } else if (!southEast.latitude.testMeshUnitFive()) {
-        throw new InvalidUnitException("latitude of southEast");
-      } else if (!southEast.longitude.testMeshUnitFive()) {
-        throw new InvalidUnitException("longitude of southEast");
-      } else if (!northWest.latitude.testMeshUnitFive()) {
-        throw new InvalidUnitException("latitude of northWest");
-      } else if (!northWest.longitude.testMeshUnitFive()) {
-        throw new InvalidUnitException("longitude of northWest");
-      } else if (!northEast.latitude.testMeshUnitFive()) {
-        throw new InvalidUnitException("latitude of northEast");
-      } else if (!northEast.longitude.testMeshUnitFive()) {
-        throw new InvalidUnitException("longitude of northEast");
-      }
+    if (!southWest.isUnit(unit)) {
+      throw new InvalidUnitException("southWest");
+    } else if (!southEast.isUnit(unit)) {
+      throw new InvalidUnitException("southEast");
+    } else if (!northWest.latitude.isUnit(unit)) {
+      throw new InvalidUnitException("northWest");
+    } else if (!northEast.latitude.isUnit(unit)) {
+      throw new InvalidUnitException("northEast");
     }
 
     final MeshCoord nextLatitude = southWest.latitude.nextUp(unit);
@@ -187,14 +177,6 @@ public class MeshCell {
    */
   public static MeshCell ofMeshNode(final MeshNode node, final MeshUnit unit)
       throws InvalidCellException, InvalidUnitException, ArithmeticException {
-    if (MeshUnit.FIVE.equals(unit)) {
-      if (!node.latitude.testMeshUnitFive()) {
-        throw new InvalidUnitException();
-      } else if (!node.longitude.testMeshUnitFive()) {
-        throw new InvalidUnitException();
-      }
-    }
-
     final MeshCoord nextLatitude = node.latitude.nextUp(unit);
     final MeshCoord nextLongitude = node.longitude.nextUp(unit);
 

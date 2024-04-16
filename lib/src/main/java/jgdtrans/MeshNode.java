@@ -181,6 +181,26 @@ public class MeshNode {
   }
 
   /**
+   * Returns {@code true} if {@code this} is compatible to the {@code unit}.
+   *
+   * <p>This always returns {@code true} if {@code unit} is {@link MeshUnit#ONE}.
+   *
+   * <h4>Example</h4>
+   *
+   * <pre>{@code
+   * MeshNode node = MeshNode.ofMeshcode(54401027);
+   * assert node.isUnit(MeshUnit.ONE) == true;
+   * assert node.isUnit(MeshUnit.FIVE) == false;
+   * }</pre>
+   *
+   * @param unit The mesh unit.
+   * @return {@code true} if {@code this} is compatible to the {@code unit}.
+   */
+  public boolean isUnit(final MeshUnit unit) {
+    return this.latitude.isUnit(unit) && this.longitude.isUnit(unit);
+  }
+
+  /**
    * Returns a meshcode represents {@code this}.
    *
    * <p>The result is up to 8 digits.
