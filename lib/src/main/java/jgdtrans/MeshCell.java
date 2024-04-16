@@ -30,7 +30,7 @@ import java.util.Objects;
  * <pre>{@code
  * Point point = new Point(36.10377479, 140.087855041);
  *
- * MeshCell cell = MeshCell.ofPoint(point, MeshUnit.ONE)
+ * MeshCell cell = MeshCell.ofPoint(point, MeshUnit.ONE);
  * assert cell.equals(new MeshCell(
  *     MeshNode.ofMeshcode(54401027),
  *     MeshNode.ofMeshcode(54401028),
@@ -169,7 +169,7 @@ public class MeshCell {
    *
    * <pre>{@code
    * MeshCell cell = MeshCell.ofMeshNode(
-   *     new ofMeshNode.ofMeshcode(54401027),
+   *     MeshNode.ofMeshcode(54401027),
    *     MeshUnit.ONE
    * );
    * assert cell.equals(new MeshCell(
@@ -182,7 +182,7 @@ public class MeshCell {
    * }</pre>
    *
    * @param node The south-west mesh node of the resulting cell.
-   * @param unit The unit of the mesh
+   * @param unit The unit of the mesh.
    * @return The meth cell
    */
   public static MeshCell ofMeshNode(final MeshNode node, final MeshUnit unit)
@@ -213,7 +213,7 @@ public class MeshCell {
    * <h4>Example</h4>
    *
    * <pre>{@code
-   * Point point = Point(36.10377479, 140.087855041, 10.0)
+   * Point point = new Point(36.10377479, 140.087855041, 10.0);
    *
    * MeshCell cell = MeshCell.ofPoint(point, MeshUnit.ONE);
    * assert cell.equals(new MeshCell(
@@ -230,7 +230,7 @@ public class MeshCell {
    *     MeshNode.ofMeshcode(54401100),
    *     MeshNode.ofMeshcode(54401055),
    *     MeshNode.ofMeshcode(54401150),
-   *     MeshUnit.ONE
+   *     MeshUnit.FIVE
    * ));
    * }</pre>
    *
@@ -250,7 +250,7 @@ public class MeshCell {
    * <h4>Example</h4>
    *
    * <pre>{@code
-   * Point point = Point(36.10377479, 140.087855041, 10.0)
+   * Point point = new Point(36.10377479, 140.087855041, 10.0)
    *
    * MeshCell cell = MeshCell.ofPoint(point, MeshUnit.ONE);
    * assert cell.southWest().equals(MeshNode.ofMeshcode(54401027));
@@ -268,7 +268,7 @@ public class MeshCell {
    * <h4>Example</h4>
    *
    * <pre>{@code
-   * Point point = Point(36.10377479, 140.087855041, 10.0)
+   * Point point = new Point(36.10377479, 140.087855041, 10.0);
    *
    * MeshCell cell = MeshCell.ofPoint(point, MeshUnit.ONE);
    * assert cell.southEast().equals(MeshNode.ofMeshcode(54401028));
@@ -286,7 +286,7 @@ public class MeshCell {
    * <h4>Example</h4>
    *
    * <pre>{@code
-   * Point point = Point(36.10377479, 140.087855041, 10.0)
+   * Point point = new Point(36.10377479, 140.087855041, 10.0);
    *
    * MeshCell cell = MeshCell.ofPoint(point, MeshUnit.ONE);
    * assert cell.northWest().equals(MeshNode.ofMeshcode(54401037));
@@ -304,7 +304,7 @@ public class MeshCell {
    * <h4>Example</h4>
    *
    * <pre>{@code
-   * Point point = Point(36.10377479, 140.087855041, 10.0)
+   * Point point = new Point(36.10377479, 140.087855041, 10.0);
    *
    * MeshCell cell = MeshCell.ofPoint(point, MeshUnit.ONE);
    * assert cell.northEast().equals(MeshNode.ofMeshcode(54401038));
@@ -322,7 +322,7 @@ public class MeshCell {
    * <h4>Example</h4>
    *
    * <pre>{@code
-   * Point point = Point(36.10377479, 140.087855041, 10.0)
+   * Point point = new Point(36.10377479, 140.087855041, 10.0);
    *
    * MeshCell cell = MeshCell.ofPoint(point, MeshUnit.ONE);
    * assert cell.unit().equals(MeshUnit.ONE);

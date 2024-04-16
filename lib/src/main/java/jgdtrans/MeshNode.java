@@ -79,7 +79,7 @@ public class MeshNode {
   }
 
   /**
-   * Makes a {@link MeshNode} obj represented by {@code meshcode}.
+   * Makes a {@link MeshNode} instance represented by {@code meshcode}.
    *
    * <h4>Example</h4>
    *
@@ -88,7 +88,7 @@ public class MeshNode {
    * assert node.equals(new MeshNode(new MeshCoord(54, 1, 2), new MeshCoord(40, 0, 7)));
    * }</pre>
    *
-   * @param meshcode the meshcode
+   * @param meshcode The meshcode.
    * @return A {@link MeshNode} instance.
    * @see MeshNode#toMeshcode()
    */
@@ -123,7 +123,7 @@ public class MeshNode {
    * <h4>Example</h4>
    *
    * <pre>{@code
-   * Point point = new Point(36.103774791666666, 140.08785504166664, 10.0)
+   * Point point = new Point(36.103774791666666, 140.08785504166664, 10.0);
    * MeshNode node;
    *
    * node = MeshNode.ofPoint(point, MeshUnit.ONE);
