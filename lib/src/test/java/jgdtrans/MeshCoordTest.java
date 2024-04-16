@@ -21,6 +21,19 @@ import org.junit.jupiter.api.Test;
 
 public class MeshCoordTest {
   @Test
+  void constructor() {
+    assertDoesNotThrow(() -> new MeshCoord(99, 7, 9));
+
+    assertThrows(ValueOutOfRangeException.class, () -> new MeshCoord(0, 0, 10));
+    assertThrows(ValueOutOfRangeException.class, () -> new MeshCoord(0, 8, 0));
+    assertThrows(ValueOutOfRangeException.class, () -> new MeshCoord(100, 0, 0));
+
+    assertThrows(ValueOutOfRangeException.class, () -> new MeshCoord(0, 0, -1));
+    assertThrows(ValueOutOfRangeException.class, () -> new MeshCoord(0, -1, 0));
+    assertThrows(ValueOutOfRangeException.class, () -> new MeshCoord(-1, 0, 0));
+  }
+
+  @Test
   void identity() {
     MeshCoord coord;
 
