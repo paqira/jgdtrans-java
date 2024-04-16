@@ -99,12 +99,12 @@ public class MeshNode {
 
     int rest;
 
-    final int lat_first = meshcode / (100 * 10_000);
-    rest = meshcode % (100 * 10_000);
-    final int lng_first = rest / 10_000;
-    rest %= 10_000;
+    final int lat_first = meshcode / (100_00_00);
+    rest = meshcode % (100_00_00);
+    final int lng_first = rest / 100_00;
+    rest %= 100_00;
 
-    final int lat_second = rest / (10 * 100);
+    final int lat_second = rest / (10_00);
     rest %= 10 * 100;
     final int lng_second = rest / 100;
     rest %= 100;
