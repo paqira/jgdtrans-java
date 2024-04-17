@@ -327,6 +327,34 @@ public class Point {
         this.altitude + correction.altitude);
   }
 
+  /**
+   * Make a {@link Point} instance by subtracting {@code correction}.
+   *
+   * <p>This is not in-place.
+   *
+   * <h4>Example</h4>
+   *
+   * <pre>{@code
+   * Correction corr = new Correction(1.0, 1.0, 1.0);
+   * Point point = new Point(0.0, 0.0, 0.0);
+   *
+   * assert point.sub(corr).equals(new Point(-1.0, -1.0, -1.0));
+   *
+   * // is not in-place,
+   * assert point.equals(new Point(0.0, 0.0, 0.0));
+   * }</pre>
+   *
+   * @param correction The transformation correction, not null.
+   * @return A new {@link Point} instance, not null.
+   */
+  public Point sub(final Correction correction) {
+    Objects.requireNonNull(correction, "correction");
+    return new Point(
+        this.latitude - correction.latitude,
+        this.longitude - correction.longitude,
+        this.altitude - correction.altitude);
+  }
+
   @Override
   public String toString() {
     return String.format(
