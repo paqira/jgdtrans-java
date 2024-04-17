@@ -92,9 +92,9 @@ public class MeshCell {
       throw new InvalidUnitException("southWest");
     } else if (!southEast.isMeshUnit(meshUnit)) {
       throw new InvalidUnitException("southEast");
-    } else if (!northWest.latitude.isMeshUnit(meshUnit)) {
+    } else if (!northWest.isMeshUnit(meshUnit)) {
       throw new InvalidUnitException("northWest");
-    } else if (!northEast.latitude.isMeshUnit(meshUnit)) {
+    } else if (!northEast.isMeshUnit(meshUnit)) {
       throw new InvalidUnitException("northEast");
     }
 
