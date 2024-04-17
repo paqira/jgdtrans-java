@@ -44,7 +44,7 @@ jobs:
       - name: Fix Dep
         run: sed -i -e 's/6.25.0/6.13.0/' gradle/libs.versions.toml
       - name: Fix JavaLanguageVersion
-        run: sed -i -e 's/JavaLanguageVersion\.of(\d{1,2})/JavaLanguageVersion.of(8)/' lib/build.gradle.kts
+        run: sed -i -e 's/JavaLanguageVersion.of(\d{1,2})/JavaLanguageVersion.of(8)/' lib/build.gradle.kts
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
       - name: Test
