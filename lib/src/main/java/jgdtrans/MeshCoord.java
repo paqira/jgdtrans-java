@@ -65,11 +65,11 @@ public class MeshCoord implements Comparable<MeshCoord> {
    * @param third The third digit, {@code 0} to {@code 9}.
    */
   public MeshCoord(final int first, final int second, final int third) {
-    if (!testFirst(first)) {
+    if (first < 0 || 100 <= first) {
       throw new ValueOutOfRangeException("first");
-    } else if (!testSecond(second)) {
+    } else if (second < 0 || 8 <= second) {
       throw new ValueOutOfRangeException("second");
-    } else if (!testThird(third)) {
+    } else if (third < 0 || 10 <= third) {
       throw new ValueOutOfRangeException("third");
     }
 
@@ -78,24 +78,12 @@ public class MeshCoord implements Comparable<MeshCoord> {
     this.third = third;
   }
 
-  private static boolean testFirst(final int first) {
-    return 0 <= first && first < 100;
-  }
-
-  private static boolean testSecond(final int second) {
-    return 0 <= second && second < 8;
-  }
-
-  private static boolean testThird(final int third) {
-    return 0 <= third && third < 10;
-  }
-
-  private static MeshCoord ofDegree(final double v, final MeshUnit meshUnit) {
-    final int integer = (int) Math.floor(v);
+  private static MeshCoord ofDegree(final double degree, final MeshUnit meshUnit) {
+    final int integer = (int) Math.floor(degree);
 
     final int first = integer % 100;
-    final int second = (int) Math.floor(8.0 * v) - 8 * integer;
-    final int third = (int) Math.floor(80.0 * v) - 80 * integer - 10 * second;
+    final int second = (int) Math.floor(8.0 * degree) - 8 * integer;
+    final int third = (int) Math.floor(80.0 * degree) - 80 * integer - 10 * second;
 
     switch (meshUnit) { // Callee checks unit is not null
       case ONE:
@@ -131,7 +119,7 @@ public class MeshCoord implements Comparable<MeshCoord> {
   public static MeshCoord ofLatitude(final double degree, final MeshUnit meshUnit)
       throws ValueOutOfRangeException {
     double value = 3.0 * degree / 2.0;
-    if ((Double.doubleToRawLongBits(degree) & 0b1L) == 0b1L) {
+    if ((Double.doubleToRawLongBits(degree) % 2L) != 0L) {
       value = Math.nextUp(value);
     }
 

@@ -15,6 +15,8 @@
  */
 package jgdtrans;
 
+import java.util.Objects;
+
 /**
  * A triplet of latitude, longitude and altitude.
  *
@@ -161,11 +163,11 @@ public class Point {
    * assert point.equals(new Point(36.1, 140.0875, 0.0));
    * }</pre>
    *
-   * @param meshNode The instance of {@link MeshNode}, may not be null.
+   * @param node The instance of {@link MeshNode}, may not be null.
    * @return A {@link Point} instance, not null.
    */
-  public static Point ofMeshNode(final MeshNode meshNode) {
-    return new Point(meshNode.latitude.toLatitude(), meshNode.longitude.toLongitude(), 0.0);
+  public static Point ofMeshNode(final MeshNode node) {
+    return Objects.requireNonNull(node, "node").toPoint();
   }
 
   /**
@@ -305,18 +307,20 @@ public class Point {
    * <h4>Example</h4>
    *
    * <pre>{@code
-   * Point point = new Point(0.0, 0.0, 0.0);
    * Correction corr = new Correction(1.0, 1.0, 1.0);
+   * Point point = new Point(0.0, 0.0, 0.0);
+   *
    * assert point.add(corr).equals(new Point(1.0, 1.0, 1.0));
    *
    * // is not in-place,
-   * assert point.normalize().equals(new Point(0.0, 0.0, 0.0));
+   * assert point.equals(new Point(0.0, 0.0, 0.0));
    * }</pre>
    *
    * @param correction The transformation correction, not null.
    * @return A new {@link Point} instance, not null.
    */
   public Point add(final Correction correction) {
+    Objects.requireNonNull(correction, "correction");
     return new Point(
         this.latitude + correction.latitude,
         this.longitude + correction.longitude,

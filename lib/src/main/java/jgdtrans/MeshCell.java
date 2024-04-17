@@ -82,19 +82,13 @@ public class MeshCell {
       final MeshNode northWest,
       final MeshNode northEast,
       final MeshUnit meshUnit) {
-    Objects.requireNonNull(southWest, "southWest");
-    Objects.requireNonNull(southEast, "southEast");
-    Objects.requireNonNull(northWest, "northWest");
-    Objects.requireNonNull(northEast, "northEast");
-    Objects.requireNonNull(meshUnit, "meshUnit");
-
-    if (!southWest.isMeshUnit(meshUnit)) {
+    if (!Objects.requireNonNull(southWest, "southWest").isMeshUnit(meshUnit)) {
       throw new InvalidUnitException("southWest");
-    } else if (!southEast.isMeshUnit(meshUnit)) {
+    } else if (!Objects.requireNonNull(southEast, "southEast").isMeshUnit(meshUnit)) {
       throw new InvalidUnitException("southEast");
-    } else if (!northWest.isMeshUnit(meshUnit)) {
+    } else if (!Objects.requireNonNull(northWest, "northWest").isMeshUnit(meshUnit)) {
       throw new InvalidUnitException("northWest");
-    } else if (!northEast.isMeshUnit(meshUnit)) {
+    } else if (!Objects.requireNonNull(northEast, "northEast").isMeshUnit(meshUnit)) {
       throw new InvalidUnitException("northEast");
     }
 
@@ -177,6 +171,8 @@ public class MeshCell {
    */
   public static MeshCell ofMeshNode(final MeshNode node, final MeshUnit meshUnit)
       throws InvalidCellException, InvalidUnitException, ArithmeticException {
+    Objects.requireNonNull(node, "node");
+
     final MeshCoord nextLatitude = node.latitude.nextUp(meshUnit);
     final MeshCoord nextLongitude = node.longitude.nextUp(meshUnit);
 

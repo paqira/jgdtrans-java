@@ -140,6 +140,8 @@ public class MeshNode {
    */
   public static MeshNode ofPoint(final Point point, final MeshUnit meshUnit)
       throws ValueOutOfRangeException {
+    Objects.requireNonNull(point, "point");
+
     final MeshCoord latitude = MeshCoord.ofLatitude(point.latitude, meshUnit);
     final MeshCoord longitude = MeshCoord.ofLongitude(point.longitude, meshUnit);
 
@@ -234,7 +236,7 @@ public class MeshNode {
    * @return A {@link Point} of the mesh node
    */
   public Point toPoint() {
-    return Point.ofMeshNode(this);
+    return new Point(this.latitude.toLatitude(), this.longitude.toLongitude(), 0.0);
   }
 
   @Override

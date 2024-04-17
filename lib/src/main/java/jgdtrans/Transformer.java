@@ -67,7 +67,7 @@ public class Transformer {
   /**
    * Makes a {@link Transformer}.
    *
-   * <p>This is equivalent to {@code Transformer(unit, parameter, null)}.
+   * <p>This is equivalent to {@code Transformer(format, parameter, null)}.
    *
    * <h4>Example</h4>
    *
@@ -409,8 +409,9 @@ public class Transformer {
    * @see Transformer#forward(Point)
    */
   public Correction forwardCorrection(final Point point) throws ParameterNotFoundException {
-    final MeshCell cell =
-        MeshCell.ofPoint(Objects.requireNonNull(point, "point"), this.format.meshUnit());
+    Objects.requireNonNull(point, "point");
+
+    final MeshCell cell = MeshCell.ofPoint(point, this.format.meshUnit());
     final Quadruple quadruple = this.parameterQuadruple(cell);
     final MeshCell.Position position = cell.position(point);
 
