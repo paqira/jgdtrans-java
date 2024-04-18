@@ -15,20 +15,20 @@
  */
 package jgdtrans;
 
-public class ParseParFileException extends Exception {
-  public ParseParFileException() {
+public class PointOutOfRangeException extends RuntimeException {
+  public PointOutOfRangeException() {
     super();
   }
 
-  public ParseParFileException(final String s) {
+  public PointOutOfRangeException(final String s) {
     super(s);
   }
 
-  public ParseParFileException(final String s, final Throwable cause) {
+  public PointOutOfRangeException(final String s, final Throwable cause) {
     super(s, cause);
   }
 
-  public ParseParFileException(final Throwable cause) {
+  public PointOutOfRangeException(final Throwable cause) {
     super(cause);
   }
 }

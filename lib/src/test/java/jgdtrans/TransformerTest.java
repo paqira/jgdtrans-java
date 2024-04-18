@@ -125,7 +125,7 @@ class TransformerTest {
   // parser
 
   @Test
-  void parseTKY2JGD() throws ParseParFileException {
+  void parseTKY2JGD() throws ParseParException {
     String s;
     Transformer tf;
     HashMap<Integer, Parameter> m;
@@ -188,7 +188,7 @@ class TransformerTest {
   }
 
   @Test
-  void parsePatchJGD() throws ParseParFileException {
+  void parsePatchJGD() throws ParseParException {
     String s;
     Transformer tf;
     HashMap<Integer, Parameter> m;
@@ -261,7 +261,7 @@ class TransformerTest {
   }
 
   @Test
-  void parsePatchJGD_H() throws ParseParFileException {
+  void parsePatchJGD_H() throws ParseParException {
     String s;
     Transformer tf;
     HashMap<Integer, Parameter> m;

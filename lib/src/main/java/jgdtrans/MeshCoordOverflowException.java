@@ -15,20 +15,20 @@
  */
 package jgdtrans;
 
-public class ParameterNotFoundException extends Exception {
-  public ParameterNotFoundException() {
+public class MeshCoordOverflowException extends RuntimeException {
+  public MeshCoordOverflowException() {
     super();
   }
 
-  public ParameterNotFoundException(final String s) {
+  public MeshCoordOverflowException(final String s) {
     super(s);
   }
 
-  public ParameterNotFoundException(final String s, final Throwable cause) {
+  public MeshCoordOverflowException(final String s, final Throwable cause) {
     super(s, cause);
   }
 
-  public ParameterNotFoundException(final Throwable cause) {
+  public MeshCoordOverflowException(final Throwable cause) {
     super(cause);
   }
 }

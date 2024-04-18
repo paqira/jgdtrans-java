@@ -94,20 +94,20 @@ class Parser {
   }
 
   protected static int parseMeshcode(final String line, final Range range, final int lineNo)
-      throws ParseParFileException {
+      throws ParseParException {
     try {
       final String substring = line.substring(range.start, range.stop);
       return Integer.parseUnsignedInt(substring.trim());
     } catch (final IndexOutOfBoundsException e) {
-      throw new ParseParFileException("meshcode not found, line " + lineNo, e);
+      throw new ParseParException("meshcode not found, line " + lineNo, e);
     } catch (final NumberFormatException e) {
-      throw new ParseParFileException("invalid meshcode, line " + lineNo, e);
+      throw new ParseParException("invalid meshcode, line " + lineNo, e);
     }
   }
 
   protected static double parseValue(
       final String line, final Range range, final String name, final int lineNo)
-      throws ParseParFileException {
+      throws ParseParException {
     if (Objects.isNull(range)) {
       return 0.0;
     } else {
@@ -115,16 +115,16 @@ class Parser {
         final String substring = line.substring(range.start, range.stop);
         return Double.parseDouble(substring.trim());
       } catch (final IndexOutOfBoundsException e) {
-        throw new ParseParFileException(name + " not found, line " + lineNo, e);
+        throw new ParseParException(name + " not found, line " + lineNo, e);
       } catch (final NumberFormatException e) {
-        throw new ParseParFileException("invalid " + name + ", line " + lineNo, e);
+        throw new ParseParException("invalid " + name + ", line " + lineNo, e);
       }
     }
   }
 
   protected static Transformer readValue(
       final BufferedReader reader, final Format format, final String description)
-      throws IOException, ParseParFileException {
+      throws IOException, ParseParException {
     final Parser parser = Parser.ofFormat(format);
     final String header = parser.header(reader);
     final TreeMap<Integer, Parameter> parameter = parser.parameter(reader);
@@ -133,13 +133,13 @@ class Parser {
   }
 
   /** Takes this.header lines. */
-  protected String header(final BufferedReader reader) throws IOException, ParseParFileException {
+  protected String header(final BufferedReader reader) throws IOException, ParseParException {
     final String[] temp = new String[this.header];
 
     String line;
     for (int i = 0; i < this.header; i++) {
       line = reader.readLine();
-      if (Objects.isNull(line)) throw new ParseParFileException("header");
+      if (Objects.isNull(line)) throw new ParseParException("header");
       temp[i] = line;
     }
 
@@ -147,7 +147,7 @@ class Parser {
   }
 
   protected TreeMap<Integer, Parameter> parameter(final BufferedReader reader)
-      throws IOException, ParseParFileException {
+      throws IOException, ParseParException {
     // make parameter
     final TreeMap<Integer, Parameter> parameter = new TreeMap<>();
 

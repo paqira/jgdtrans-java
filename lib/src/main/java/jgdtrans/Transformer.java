@@ -78,8 +78,8 @@ public class Transformer {
    * assert tf.description().equals(Optional.empty());
    * }</pre>
    *
-   * @param format The format of par file.
-   * @param parameter The transformation parameter.
+   * @param format The format of par file, <strong>may not be null</strong>.
+   * @param parameter The transformation parameter, <strong>may not be null</strong>.
    * @see Transformer#Transformer(Format, Map, String)
    * @see Transformer#format()
    * @see Transformer#parameter()
@@ -94,8 +94,8 @@ public class Transformer {
   /**
    * Makes a {@link Transformer} with description.
    *
-   * <p>The entry represents single line of par file's parameter section, may not be null, and the
-   * key and the value is not null.
+   * <p>The entry represents single line of par file's parameter section, <strong>may not be
+   * null</strong>, and the key and the value is not null.
    *
    * <h4>Example</h4>
    *
@@ -106,8 +106,8 @@ public class Transformer {
    * assert tf.description().equals(Optional.of("my parameter"));
    * }</pre>
    *
-   * @param format The format of par file.
-   * @param parameter The transformation parameter.
+   * @param format The format of par file, <strong>may not be null</strong>.
+   * @param parameter The transformation parameter, <strong>may not be null</strong>.
    * @param description The description.
    * @see Transformer#format()
    * @see Transformer#parameter()
@@ -136,14 +136,14 @@ public class Transformer {
    * assert tf.parameter().get(12345678).equals(new Parameter(0.00001   0.00002   0.00003));
    * }</pre>
    *
-   * @param content The par formatted text, may not be null.
-   * @param format The format of the {@code content}, may not be null.
-   * @return A {@link Transformer} instance, not null.
-   * @throws ParseParFileException If invalid data found
+   * @param content The par formatted text, <strong>may not be null</strong>.
+   * @param format The format of the {@code content}, <strong>may not be null</strong>.
+   * @return A {@link Transformer} instance, <strong>not null</strong>.
+   * @throws ParseParException When invalid data found.
    * @see Transformer#fromString(String, Format, String)
    */
   public static Transformer fromString(final String content, final Format format)
-      throws ParseParFileException {
+      throws ParseParException {
     Objects.requireNonNull(content, "content");
     Objects.requireNonNull(format, "format");
 
@@ -170,15 +170,15 @@ public class Transformer {
    * assert tf.description().equals(Optional.of("My parameter"));
    * }</pre>
    *
-   * @param content The par formatted text, may not be null.
-   * @param format The format of the {@code content}, may not be null.
+   * @param content The par formatted text, <strong>may not be null</strong>.
+   * @param format The format of the {@code content}, <strong>may not be null</strong>.
    * @param description The description.
-   * @return A {@link Transformer} instance, not null.
-   * @throws ParseParFileException If invalid data found.
+   * @return A {@link Transformer} instance, <strong>not null</strong>.
+   * @throws ParseParException When invalid data found.
    */
   public static Transformer fromString(
       final String content, final Format format, final String description)
-      throws ParseParFileException {
+      throws ParseParException {
     Objects.requireNonNull(content, "content");
     Objects.requireNonNull(format, "format");
 
@@ -212,7 +212,7 @@ public class Transformer {
    * assert tf.format().equals(Format.SemiDynaEXE);
    * }</pre>
    *
-   * @return The format, not null.
+   * @return The format, <strong>not null</strong>.
    */
   public Format format() {
     return this.format;
@@ -228,7 +228,7 @@ public class Transformer {
    * assert tf.parameter().equals(new HashMap<>());
    * }</pre>
    *
-   * @return The parameter, not null.
+   * @return The parameter, <strong>not null</strong>.
    */
   public Map<Integer, Parameter> parameter() {
     return this.parameter;
@@ -244,7 +244,7 @@ public class Transformer {
    * assert tf.description().equals(Optional.of("my parameter"));
    * }</pre>
    *
-   * @return The description (the header of par file), not null.
+   * @return The description (the header of par file), <strong>not null</strong>.
    */
   public Optional<String> description() {
     return Optional.ofNullable(this.description);
@@ -274,12 +274,14 @@ public class Transformer {
    * assert point.equals(new Point(36.103773017086695, 140.08785924333452, 2.4363138578103));
    * }</pre>
    *
-   * @param point The origin of transformation, may be not null.
-   * @return The forwardly transformed point, not null.
-   * @throws ParameterNotFoundException If the parameter not found.
+   * @param point The origin of transformation, <strong>may not be null</strong>.
+   * @return The forwardly transformed point, <strong>not null</strong>.
+   * @throws ParameterNotFoundException When the parameter is not found.
+   * @throws PointOutOfRangeException When the {@code point} is ouf-of-bounds.
    * @see Transformer#forwardCorrection(Point)
    */
-  public Point forward(final Point point) throws ParameterNotFoundException {
+  public Point forward(final Point point)
+      throws ParameterNotFoundException, PointOutOfRangeException {
     final Correction correction = this.forwardCorrection(point);
     return new Point(
         point.latitude + correction.latitude,
@@ -321,13 +323,16 @@ public class Transformer {
    * assert point.equals(new Point(36.10377479000002, 140.087855041, 2.339999999578243));
    * }</pre>
    *
-   * @param point The origin of transformation, may not be null.
-   * @return The backwardly transformed point, not null.
-   * @throws ParameterNotFoundException If the parameter not found.
+   * @param point The origin of transformation, <strong>may not be null</strong>.
+   * @return The backwardly transformed point, <strong>not null</strong>.
+   * @throws ParameterNotFoundException When the parameter not found.
+   * @throws ParameterNotFoundException When the parameter is not found.
+   * @throws PointOutOfRangeException When the {@code point} is ouf-of-bounds.
    * @see Transformer#backwardCorrection(Point)
    * @see Transformer#backwardSafe(Point)
    */
-  public Point backward(final Point point) throws ParameterNotFoundException {
+  public Point backward(final Point point)
+      throws ParameterNotFoundException, PointOutOfRangeException {
     final Correction correction = this.backwardCorrection(point);
     return new Point(
         point.latitude + correction.latitude,
@@ -363,15 +368,16 @@ public class Transformer {
    * assert point.equals(new Point(36.10377479, 140.087855041, 2.3399999999970085));
    * }</pre>
    *
-   * @param point The origin of transformation, may not be null.
-   * @return The backwardly transformed point, not null.
-   * @throws ParameterNotFoundException If parameter not found.
-   * @throws CorrectionNotFoundException If verification failed.
+   * @param point The origin of transformation, <strong>may not be null</strong>.
+   * @return The backwardly transformed point, <strong>not null</strong>.
+   * @throws ParameterNotFoundException When parameter is not found.
+   * @throws CorrectionNotFoundException When verification failed.
+   * @throws PointOutOfRangeException When the {@code point} is ouf-of-bounds.
    * @see Transformer#backwardSafeCorrection(Point)
    * @see Transformer#backward(Point)
    */
   public Point backwardSafe(final Point point)
-      throws CorrectionNotFoundException, ParameterNotFoundException {
+      throws CorrectionNotFoundException, ParameterNotFoundException, PointOutOfRangeException {
     final Correction correction = this.backwardSafeCorrection(point);
     return new Point(
         point.latitude + correction.latitude,
@@ -403,15 +409,23 @@ public class Transformer {
    * assert point.equals(new Correction(-1.7729133100878255e-06, 4.202334510058886e-06, 0.09631385781030007));
    * }</pre>
    *
-   * @param point The origin of transformation, may not be null.
-   * @return The correction on forward transformation, not null.
-   * @throws ParameterNotFoundException If parameter not found.
+   * @param point The origin of transformation, <strong>may not be null</strong>.
+   * @return The correction on forward transformation, <strong>not null</strong>.
+   * @throws ParameterNotFoundException When the parameter is not found.
+   * @throws PointOutOfRangeException When the {@code point} is ouf-of-bounds.
    * @see Transformer#forward(Point)
    */
-  public Correction forwardCorrection(final Point point) throws ParameterNotFoundException {
+  public Correction forwardCorrection(final Point point)
+      throws ParameterNotFoundException, PointOutOfRangeException {
     Objects.requireNonNull(point, "point");
 
-    final MeshCell cell = MeshCell.ofPoint(point, this.format.meshUnit());
+    final MeshCell cell;
+    try {
+      cell = MeshCell.ofPoint(point, this.format.meshUnit());
+    } catch (final Exception e) {
+      throw new PointOutOfRangeException(e);
+    }
+
     final Quadruple quadruple = this.parameterQuadruple(cell);
     final MeshCell.Position position = cell.position(point);
 
@@ -473,13 +487,15 @@ public class Transformer {
    * assert point.equals(new Correction(1.7729133219831587e-06, -4.202334509042613e-06, -0.0963138582320569));
    * }</pre>
    *
-   * @param point The origin of transformation, may not be null.
-   * @return The correction on backward transformation, not null.
-   * @throws ParameterNotFoundException If parameter not found.
+   * @param point The origin of transformation, <strong>may not be null</strong>.
+   * @return The correction on backward transformation, <strong>not null</strong>.
+   * @throws ParameterNotFoundException When the parameter is not found.
+   * @throws PointOutOfRangeException When the {@code point} is ouf-of-bounds.
    * @see Transformer#backward(Point)
    * @see Transformer#backwardSafeCorrection(Point)
    */
-  public Correction backwardCorrection(final Point point) throws ParameterNotFoundException {
+  public Correction backwardCorrection(final Point point)
+      throws ParameterNotFoundException, PointOutOfRangeException {
     Objects.requireNonNull(point, "point");
 
     final double DELTA = 1.0 / 300.0;
@@ -523,15 +539,16 @@ public class Transformer {
    * assert point.equals(new Correction(1.772913310099049e-06, -4.202334510033827e-06, -0.0963138578132916));
    * }</pre>
    *
-   * @param point The origin of transformation, may not be null.
-   * @return The correction on backward transformation, not null.
-   * @throws ParameterNotFoundException If parameter not found.
-   * @throws CorrectionNotFoundException If verification failed.
+   * @param point The origin of transformation, <strong>may not be null</strong>.
+   * @return The correction on backward transformation, <strong>not null</strong>.
+   * @throws ParameterNotFoundException When the parameter is not found.
+   * @throws CorrectionNotFoundException When verification failed.
+   * @throws PointOutOfRangeException When the {@code point} is ouf-of-bounds.
    * @see Transformer#backwardSafe(Point)
    * @see Transformer#backwardCorrection(Point)
    */
   public Correction backwardSafeCorrection(final Point point)
-      throws CorrectionNotFoundException, ParameterNotFoundException {
+      throws CorrectionNotFoundException, ParameterNotFoundException, PointOutOfRangeException {
     Objects.requireNonNull(point, "point");
 
     final double SCALE = 3600.;
@@ -544,7 +561,12 @@ public class Transformer {
     for (int i = 0; i < ITERATION; i++) {
       final Point current = new Point(yn, xn, 0.0);
 
-      final MeshCell cell = MeshCell.ofPoint(current, this.format.meshUnit());
+      final MeshCell cell;
+      try {
+        cell = MeshCell.ofPoint(current, this.format.meshUnit());
+      } catch (final Exception e) {
+        throw new PointOutOfRangeException(e);
+      }
       final Quadruple quadruple = parameterQuadruple(cell);
       final MeshCell.Position position = cell.position(current);
 

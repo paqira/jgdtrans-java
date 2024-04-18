@@ -35,7 +35,7 @@ public enum MeshUnit {
   FIVE;
 
   /**
-   * Returns {@code 1} if {@code this} is {@link MeshUnit#ONE}, and {@code 5} if {@code this} is
+   * Returns {@code 1} when {@code this} is {@link MeshUnit#ONE}, and {@code 5} when {@code this} is
    * {@link MeshUnit#FIVE}.
    *
    * <h4>Example</h4>

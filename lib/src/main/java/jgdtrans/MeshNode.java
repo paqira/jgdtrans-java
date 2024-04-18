@@ -54,9 +54,9 @@ public class MeshNode {
    * assert node.longitude().equals(new MeshCoord(40, 0, 7));
    * }</pre>
    *
-   * @param latitude The mesh coord of latitude, may be not null.
-   * @param longitude The mesh coord of longitude, may be not null.
-   * @throws ValueOutOfRangeException If {@code longitude} is out-of-range.
+   * @param latitude The mesh coord of latitude, <strong>may not be null</strong>.
+   * @param longitude The mesh coord of longitude, <strong>may not be null</strong>.
+   * @throws ValueOutOfRangeException When {@code longitude} is out-of-range.
    */
   public MeshNode(final MeshCoord latitude, final MeshCoord longitude)
       throws ValueOutOfRangeException {
@@ -89,10 +89,11 @@ public class MeshNode {
    * }</pre>
    *
    * @param meshcode The meshcode.
-   * @return A {@link MeshNode} instance.
+   * @return A {@link MeshNode} instance, <strong>not null</strong>.
    * @see MeshNode#toMeshcode()
+   * @throws ValueOutOfRangeException When {@code meshcode} is out-of-range.
    */
-  public static MeshNode ofMeshcode(final int meshcode) {
+  public static MeshNode ofMeshcode(final int meshcode) throws ValueOutOfRangeException {
     if (meshcode < 0 || 10000_00_00 <= meshcode) {
       throw new ValueOutOfRangeException("meshcode");
     }
@@ -133,10 +134,11 @@ public class MeshNode {
    * assert node.equals(new MeshNode(new MeshCoord(54, 1, 0), new MeshCoord(40, 0, 5)));
    * }</pre>
    *
-   * @param point The point
-   * @param meshUnit the mesh unit
-   * @return A {@link MeshNode} instance.
+   * @param point The point, <strong>may not be null</strong>.
+   * @param meshUnit the mesh unit, <strong>may not be null</strong>.
+   * @return A {@link MeshNode} instance, <strong>not null</strong>.
    * @see Point#meshNode(MeshUnit)
+   * @throws ValueOutOfRangeException When {@code point} is out-of-range.
    */
   public static MeshNode ofPoint(final Point point, final MeshUnit meshUnit)
       throws ValueOutOfRangeException {
@@ -158,7 +160,7 @@ public class MeshNode {
    * assert node.latitude().equals(new MeshCoord(54, 1, 2));
    * }</pre>
    *
-   * @return The mesh coord of latitude, not null.
+   * @return The mesh coord of latitude, <strong>not null</strong>.
    */
   public MeshCoord latitude() {
     return this.latitude;
@@ -176,16 +178,16 @@ public class MeshNode {
    *
    * <p>This satisfies {@code MeshCoord(0, 0, 0) <=} and {@code <= MeshCoord(80, 0, 0)}.
    *
-   * @return The mesh coord of longitude, not null.
+   * @return The mesh coord of longitude, <strong>not null</strong>.
    */
   public MeshCoord longitude() {
     return this.longitude;
   }
 
   /**
-   * Returns {@code true} if {@code this} is compatible to the {@code meshUnit}.
+   * Returns {@code true} when {@code this} is compatible to the {@code meshUnit}.
    *
-   * <p>This always returns {@code true} if {@code meshUnit} is {@link MeshUnit#ONE}.
+   * <p>This always returns {@code true} when {@code meshUnit} is {@link MeshUnit#ONE}.
    *
    * <h4>Example</h4>
    *
@@ -195,8 +197,8 @@ public class MeshNode {
    * assert node.isUnit(MeshUnit.FIVE) == false;
    * }</pre>
    *
-   * @param meshUnit The mesh unit.
-   * @return {@code true} if {@code this} is compatible to the {@code unit}.
+   * @param meshUnit The mesh unit, <strong>may not be null</strong>.
+   * @return {@code true} when {@code this} is compatible to the {@code unit}.
    */
   public boolean isMeshUnit(final MeshUnit meshUnit) {
     return this.latitude.isMeshUnit(meshUnit) && this.longitude.isMeshUnit(meshUnit);
@@ -233,7 +235,8 @@ public class MeshNode {
    * assert node.toPoint().equals(new Point(36.1, 140.0875, 0.0));
    * }</pre>
    *
-   * @return A {@link Point} of the mesh node
+   * @return A {@link Point} of the mesh node, <strong>not null</strong>.
+   * @see Point#meshNode(MeshUnit)
    */
   public Point toPoint() {
     return new Point(this.latitude.toLatitude(), this.longitude.toLongitude(), 0.0);

@@ -34,7 +34,7 @@ public class MeshCoordTest {
   }
 
   @Test
-  void identity() {
+  void identity() throws ValueOutOfRangeException {
     MeshCoord coord;
 
     // latitude

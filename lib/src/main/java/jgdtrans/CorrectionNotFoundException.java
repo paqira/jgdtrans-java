@@ -15,4 +15,20 @@
  */
 package jgdtrans;
 
-public class CorrectionNotFoundException extends Exception {}
+public class CorrectionNotFoundException extends Exception {
+  public CorrectionNotFoundException() {
+    super();
+  }
+
+  public CorrectionNotFoundException(final String s) {
+    super(s);
+  }
+
+  public CorrectionNotFoundException(final String s, final Throwable cause) {
+    super(s, cause);
+  }
+
+  public CorrectionNotFoundException(final Throwable cause) {
+    super(cause);
+  }
+}

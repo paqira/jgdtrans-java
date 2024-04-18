@@ -70,7 +70,7 @@ public enum Format {
    * assert Format.SemiDynaEXE.meshUnit().equals(MeshUnit.FIVE);
    * }</pre>
    *
-   * @return the unit of the format, not null.
+   * @return the unit of the format, <strong>not null</strong>.
    */
   public MeshUnit meshUnit() {
     switch (this) {

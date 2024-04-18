@@ -45,15 +45,14 @@ Sample code:
 
 ```java
 import java.io.File;
-import java.io.Files;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
-import jgdtrans.Format;
-import jgdtrans.Point;
-import jgdtrans.Transformer;
+import paqira.jgdtrans.*;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args)
+            throws CorrectionNotFoundException, ParameterNotFoundException, ParseParException {
         File file = new File("SemiDyna2023.par");
         String contents = Files.readString(file.toPath(), StandardCharsets.UTF_8);
         

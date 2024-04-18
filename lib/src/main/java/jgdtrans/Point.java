@@ -105,6 +105,7 @@ public class Point {
    *
    * @param latitude The latitude [deg].
    * @param longitude The longitude [deg].
+   * @see Point#Point(double, double, double)
    */
   public Point(final double latitude, final double longitude) {
     this.latitude = latitude;
@@ -144,10 +145,11 @@ public class Point {
    * assert point.equals(new Point(36.1, 140.0875, 0.0));
    * }</pre>
    *
-   * @param meshcode The meshcode
-   * @return A {@link Point} instance, not null.
+   * @param meshcode The meshcode.
+   * @return A {@link Point} instance, <strong>not null</strong>.
+   * @throws ValueOutOfRangeException If {@code meshcode} is out-of-range.
    */
-  public static Point ofMeshcode(final int meshcode) {
+  public static Point ofMeshcode(final int meshcode) throws ValueOutOfRangeException {
     final MeshNode node = MeshNode.ofMeshcode(meshcode);
     return ofMeshNode(node);
   }
@@ -163,8 +165,9 @@ public class Point {
    * assert point.equals(new Point(36.1, 140.0875, 0.0));
    * }</pre>
    *
-   * @param node The instance of {@link MeshNode}, may not be null.
-   * @return A {@link Point} instance, not null.
+   * @param node The instance of {@link MeshNode}, <strong>may not be null</strong>.
+   * @return A {@link Point} instance, <strong>not null</strong>.
+   * @see MeshNode#ofPoint(Point, MeshUnit)
    */
   public static Point ofMeshNode(final MeshNode node) {
     return Objects.requireNonNull(node, "node").toPoint();
@@ -181,10 +184,11 @@ public class Point {
    * assert point.toMeshcode(MeshUnit.FIVE) == 54401005;
    * }</pre>
    *
-   * @param meshUnit the unit of mesh, may not be null.
-   * @return a meshcode, not null.
+   * @param meshUnit the unit of mesh, <strong>may not be null</strong>.
+   * @return A meshcode.
+   * @throws ValueOutOfRangeException If {@code this} is out-of-range.
    */
-  public int toMeshcode(final MeshUnit meshUnit) {
+  public int toMeshcode(final MeshUnit meshUnit) throws ValueOutOfRangeException {
     return this.meshNode(meshUnit).toMeshcode();
   }
 
@@ -203,11 +207,13 @@ public class Point {
    * );
    * }</pre>
    *
-   * @param meshUnit the unit of mesh, may not be null.
-   * @return A {@link MeshNode} instance, not null.
+   * @param meshUnit the unit of mesh, <strong>may not be null</strong>.
+   * @return A {@link MeshNode} instance, <strong>not null</strong>.
+   * @see MeshNode#ofPoint(Point, MeshUnit)
+   * @throws ValueOutOfRangeException If {@code this} is out-of-range.
    * @see MeshNode#ofPoint(Point, MeshUnit)
    */
-  public MeshNode meshNode(final MeshUnit meshUnit) {
+  public MeshNode meshNode(final MeshUnit meshUnit) throws ValueOutOfRangeException {
     return MeshNode.ofPoint(this, meshUnit);
   }
 
@@ -238,11 +244,16 @@ public class Point {
    * ));
    * }</pre>
    *
-   * @param meshUnit the unit of mesh, may not be null.
-   * @return A {@link MeshCell} instance, not null.
+   * @param meshUnit the unit of mesh, <strong>may not be null</strong>.
+   * @return A {@link MeshCell} instance, <strong>not null</strong>.
+   * @see MeshCell#ofPoint(Point, MeshUnit)
+   * @throws InvalidCellException When it does not construct a unit cell.
+   * @throws MeshCoordOverflowException When it does not construct a unit cell.
+   * @throws ValueOutOfRangeException When it does not construct a unit cell.
    * @see MeshCell#ofPoint(Point, MeshUnit)
    */
-  public MeshCell meshCell(final MeshUnit meshUnit) {
+  public MeshCell meshCell(final MeshUnit meshUnit)
+      throws InvalidCellException, MeshCoordOverflowException, ValueOutOfRangeException {
     return MeshCell.ofPoint(this, meshUnit);
   }
 
@@ -292,7 +303,7 @@ public class Point {
    * assert point.normalize().equals(new Point(100.0, 200.0, 5.0));
    * }</pre>
    *
-   * @return The normalized point, not null.
+   * @return The normalized point, <strong>not null</strong>.
    */
   public Point normalize() {
     return new Point(
@@ -316,8 +327,9 @@ public class Point {
    * assert point.equals(new Point(0.0, 0.0, 0.0));
    * }</pre>
    *
-   * @param correction The transformation correction, not null.
-   * @return A new {@link Point} instance, not null.
+   * @param correction The transformation correction, <strong>may not be null</strong>.
+   * @return A new {@link Point} instance, <strong>not null</strong>.
+   * @see Point#sub(Correction)
    */
   public Point add(final Correction correction) {
     Objects.requireNonNull(correction, "correction");
@@ -344,8 +356,9 @@ public class Point {
    * assert point.equals(new Point(0.0, 0.0, 0.0));
    * }</pre>
    *
-   * @param correction The transformation correction, not null.
-   * @return A new {@link Point} instance, not null.
+   * @param correction The transformation correction, <strong>may not be null</strong>.
+   * @return A new {@link Point} instance, <strong>not null</strong>.
+   * @see Point#add(Correction)
    */
   public Point sub(final Correction correction) {
     Objects.requireNonNull(correction, "correction");

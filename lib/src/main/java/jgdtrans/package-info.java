@@ -49,12 +49,11 @@
  * import java.io.Files;
  * import java.nio.charset.StandardCharsets;
  *
- * import jgdtrans.ParFormat;
- * import jgdtrans.Point;
- * import jgdtrans.Transformer;
+ * import paqira.jgdtrans.*;
  *
  * public class Main {
- *     public static void main(String[] args) throws IOException {
+ *     public static void main(String[] args)
+ *             throws CorrectionNotFoundException, ParameterNotFoundException, ParseParException {
  *         File file = new File("SemiDyna2023.par");
  *         String contents = Files.readString(file.toPath(), StandardCharsets.UTF_8);
  *
@@ -94,7 +93,7 @@
  *   <li><em>TKY2JGD for Windows Ver.1.3.79</em> (reference implementation): <a
  *       href="https://www.gsi.go.jp/sokuchikijun/tky2jgd_download.html" >
  *       https://www.gsi.go.jp/sokuchikijun/tky2jgd_download.html</a> released under <a
- *       href="https://www.gsi.go.jp/kikakuchousei/kikakuchousei40182.html" > 国土地理院コンテンツ利用規約</a>
+ *       href="https://www.gsi.go.jp/kikakuchousei/kikakuchousei40182.html" >国土地理院コンテンツ利用規約</a>
  *       which compatible to CC BY 4.0.
  *   <li>Other implementation: Rust <a href="https://github.com/paqira/jgdtrans-rs"
  *       >https://github.com/paqira/jgdtrans-rs</a>, Python <a

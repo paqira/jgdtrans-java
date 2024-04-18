@@ -15,20 +15,20 @@
  */
 package jgdtrans;
 
-public class OverflowException extends RuntimeException {
-  public OverflowException() {
+public class ParseParException extends Exception {
+  public ParseParException() {
     super();
   }
 
-  public OverflowException(final String s) {
+  public ParseParException(final String s) {
     super(s);
   }
 
-  public OverflowException(final String s, final Throwable cause) {
+  public ParseParException(final String s, final Throwable cause) {
     super(s, cause);
   }
 
-  public OverflowException(final Throwable cause) {
+  public ParseParException(final Throwable cause) {
     super(cause);
   }
 }

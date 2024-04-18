@@ -70,18 +70,26 @@ public class MeshCell {
    * ));
    * }</pre>
    *
-   * @param southWest the south-west node of the cell, may not be null.
-   * @param southEast the south-east node of the cell, may not be null.
-   * @param northWest the north-west node of the cell, may not be null.
-   * @param northEast the north-east node of the cell, may not be null.
-   * @param meshUnit the mesh unit, may not be null.
+   * @param southWest the south-west node of the cell, <strong>may not be null</strong>.
+   * @param southEast the south-east node of the cell, <strong>may not be null</strong>.
+   * @param northWest the north-west node of the cell, <strong>may not be null</strong>.
+   * @param northEast the north-east node of the cell, <strong>may not be null</strong>.
+   * @param meshUnit the mesh unit, <strong>may not be null</strong>.
+   * @throws InvalidUnitException When {@code meshUnit} is not compatible to nodes.
+   * @throws InvalidCellException When nodes does not construct a unit cell.
+   * @throws MeshCoordOverflowException When nodes does not construct a unit cell.
+   * @throws ValueOutOfRangeException When nodes does not construct a unit cell.
    */
   public MeshCell(
       final MeshNode southWest,
       final MeshNode southEast,
       final MeshNode northWest,
       final MeshNode northEast,
-      final MeshUnit meshUnit) {
+      final MeshUnit meshUnit)
+      throws InvalidUnitException,
+          MeshCoordOverflowException,
+          ValueOutOfRangeException,
+          InvalidCellException {
     if (!Objects.requireNonNull(southWest, "southWest").isMeshUnit(meshUnit)) {
       throw new InvalidUnitException("southWest");
     } else if (!Objects.requireNonNull(southEast, "southEast").isMeshUnit(meshUnit)) {
@@ -137,11 +145,19 @@ public class MeshCell {
    * ));
    * }</pre>
    *
-   * @param meshcode The meshcode
-   * @param meshUnit The unit of the mesh
-   * @return The meth cell
+   * @param meshcode The meshcode.
+   * @param meshUnit The unit of the mesh, <strong>may not be null</strong>.
+   * @return The meth cell, <strong>not null</strong>.
+   * @throws InvalidUnitException When {@code meshUnit} is not compatible to {@code meshcode}.
+   * @throws InvalidCellException When it does not construct a unit cell.
+   * @throws MeshCoordOverflowException When it does not construct a unit cell.
+   * @throws ValueOutOfRangeException When it does not construct a unit cell.
    */
-  public static MeshCell ofMeshcode(final int meshcode, final MeshUnit meshUnit) {
+  public static MeshCell ofMeshcode(final int meshcode, final MeshUnit meshUnit)
+      throws ValueOutOfRangeException,
+          InvalidUnitException,
+          MeshCoordOverflowException,
+          InvalidCellException {
     final MeshNode meshNode = MeshNode.ofMeshcode(meshcode);
     return ofMeshNode(meshNode, meshUnit);
   }
@@ -165,12 +181,19 @@ public class MeshCell {
    * ));
    * }</pre>
    *
-   * @param node The south-west mesh node of the resulting cell.
-   * @param meshUnit The unit of the mesh.
-   * @return The meth cell
+   * @param node The south-west mesh node of the resulting cell, <strong>may not be null</strong>.
+   * @param meshUnit The unit of the mesh, <strong>may not be null</strong>.
+   * @return The meth cell, <strong>not null</strong>.
+   * @throws InvalidUnitException When {@code meshUnit} is not compatible to {@code node}.
+   * @throws InvalidCellException When it does not construct a unit cell.
+   * @throws MeshCoordOverflowException When it does not construct a unit cell.
+   * @throws ValueOutOfRangeException When it does not construct a unit cell.
    */
   public static MeshCell ofMeshNode(final MeshNode node, final MeshUnit meshUnit)
-      throws InvalidCellException, InvalidUnitException, ArithmeticException {
+      throws InvalidUnitException,
+          MeshCoordOverflowException,
+          ValueOutOfRangeException,
+          InvalidCellException {
     Objects.requireNonNull(node, "node");
 
     final MeshCoord nextLatitude = node.latitude.nextUp(meshUnit);
@@ -212,12 +235,16 @@ public class MeshCell {
    * ));
    * }</pre>
    *
-   * @param point The point
-   * @param meshUnit The unit of the mesh
-   * @return The mesh cell
+   * @param point The point, <strong>may not be null</strong>.
+   * @param meshUnit The unit of the mesh, <strong>may not be null</strong>.
+   * @return The mesh cell, <strong>not null</strong>.
    * @see Point#meshCell(MeshUnit)
+   * @throws InvalidCellException When it does not construct a unit cell.
+   * @throws MeshCoordOverflowException When it does not construct a unit cell.
+   * @throws ValueOutOfRangeException When it does not construct a unit cell.
    */
-  public static MeshCell ofPoint(final Point point, final MeshUnit meshUnit) {
+  public static MeshCell ofPoint(final Point point, final MeshUnit meshUnit)
+      throws ValueOutOfRangeException, InvalidCellException, MeshCoordOverflowException {
     final MeshNode meshNode = MeshNode.ofPoint(point, meshUnit);
     return ofMeshNode(meshNode, meshUnit);
   }
@@ -234,7 +261,7 @@ public class MeshCell {
    * assert cell.southWest().equals(MeshNode.ofMeshcode(54401027));
    * }</pre>
    *
-   * @return The south-west node of the cell, not null.
+   * @return The south-west node of the cell, <strong>not null</strong>.
    */
   public MeshNode southWest() {
     return this.southWest;
@@ -252,7 +279,7 @@ public class MeshCell {
    * assert cell.southEast().equals(MeshNode.ofMeshcode(54401028));
    * }</pre>
    *
-   * @return the south-east node of the cell, not null.
+   * @return the south-east node of the cell, <strong>not null</strong>.
    */
   public MeshNode southEast() {
     return this.southEast;
@@ -270,7 +297,7 @@ public class MeshCell {
    * assert cell.northWest().equals(MeshNode.ofMeshcode(54401037));
    * }</pre>
    *
-   * @return The north-west node of the cell, not null.
+   * @return The north-west node of the cell, <strong>not null</strong>.
    */
   public MeshNode northWest() {
     return this.northWest;
@@ -288,7 +315,7 @@ public class MeshCell {
    * assert cell.northEast().equals(MeshNode.ofMeshcode(54401038));
    * }</pre>
    *
-   * @return The north-east node of the cell, not null.
+   * @return The north-east node of the cell, <strong>not null</strong>.
    */
   public MeshNode northEast() {
     return this.northEast;
@@ -309,7 +336,7 @@ public class MeshCell {
    * assert cell.meshUnit().equals(MeshUnit.FIVE);
    * }</pre>
    *
-   * @return The mesh unit, not null.
+   * @return The mesh unit, <strong>not null</strong>.
    */
   public MeshUnit meshUnit() {
     return this.meshUnit;
@@ -318,13 +345,14 @@ public class MeshCell {
   /**
    * Return the position in the cell.
    *
-   * <p>The result's components takes values from {@code 0.0} to {@code 1.0} (inclusive), if {@link
-   * Point#latitude()} and/or {@link Point#longitude()} is inside `this`.
+   * <p>The result's components takes values from {@code 0.0} to {@code 1.0} (inclusive), when
+   * {@link Point#latitude()} and/or {@link Point#longitude()} is inside `this`.
    *
    * <p>We note that the result is a (latitude, longitude) pair, not a (right-handed) (x, y) pair.
    *
-   * @param point The point
-   * @return The position, a pair of the latitude and the longitude, in the cell
+   * @param point The point, <strong>not null</strong>.
+   * @return The position, a pair of the latitude and the longitude, in the cell, <strong>not
+   *     null</strong>.
    */
   protected Position position(final Point point) {
     final double latitude = point.latitude - this.southWest.latitude.toLatitude();
