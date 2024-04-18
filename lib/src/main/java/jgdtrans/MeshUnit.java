@@ -47,7 +47,7 @@ public enum MeshUnit {
    *
    * @return {@code 1} or {@code 5}.
    */
-  public int integer() {
+  public int toInteger() {
     switch (this) {
       case ONE:
         return 1;
@@ -60,6 +60,6 @@ public enum MeshUnit {
 
   @Override
   public String toString() {
-    return String.format("MeshUnit.%s[integer=%d]", super.toString(), this.integer());
+    return String.format("MeshUnit.%s[integer=%d]", super.toString(), this.toInteger());
   }
 }

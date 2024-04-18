@@ -229,7 +229,7 @@ public class MeshCoord implements Comparable<MeshCoord> {
       case ONE:
         return true;
       case FIVE:
-        return this.third % meshUnit.integer() == 0;
+        return this.third % meshUnit.toInteger() == 0;
       default:
         throw new RuntimeException("UNREACHABLE");
     }
@@ -322,7 +322,7 @@ public class MeshCoord implements Comparable<MeshCoord> {
       }
       return new MeshCoord(this.first, this.second + 1, 0);
     }
-    return new MeshCoord(this.first, this.second, this.third + meshUnit.integer());
+    return new MeshCoord(this.first, this.second, this.third + meshUnit.toInteger());
   }
 
   /**
@@ -364,7 +364,7 @@ public class MeshCoord implements Comparable<MeshCoord> {
       }
       return new MeshCoord(this.first, this.second - 1, bound);
     }
-    return new MeshCoord(this.first, this.second, this.third - meshUnit.integer());
+    return new MeshCoord(this.first, this.second, this.third - meshUnit.toInteger());
   }
 
   @Override
