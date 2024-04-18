@@ -48,6 +48,7 @@ java {
 tasks.javadoc {
     options.memberLevel = JavadocMemberLevel.PUBLIC
     title = "${rootProject.name} $version API"
+    (options as StandardJavadocDocletOptions).header = "${rootProject.name} $version"
 }
 
 spotless {
