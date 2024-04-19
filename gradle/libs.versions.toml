@@ -4,4 +4,4 @@
 [libraries]
 
 [plugins]
-spotless = { id = "com.diffplug.spotless", version = "6.25.0" }
+spotless = { id = "com.diffplug.spotless", version = { require = "[6.13.0, 7.0.0[", prefer = "latest.release" } }
