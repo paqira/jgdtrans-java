@@ -44,32 +44,25 @@ public class MeshNode {
   protected final MeshCoord longitude;
 
   /**
-   * Smallest {@code latitude}.
+   * Smallest {@link MeshNode} value.
    *
-   * <p>Equals to {@code MeshCoord(0, 0, 0)}.
+   * <p>Equals to {@code MeshNode(MeshCoord(0, 0, 0), MeshCoord(0, 0, 0))}.
    */
-  public static final MeshCoord LATITUDE_MIN = new MeshCoord(0, 0, 0);
+  public static final MeshNode MIN = new MeshNode(MeshCoord.MIN, MeshCoord.MIN, null);
 
   /**
-   * Largest {@code latitude} value.
+   * Largest {@link MeshNode} value.
    *
-   * <p>Equals to {@code MeshCoord(99, 7, 9)}.
+   * <p>Equals to {@code MeshNode(MeshCoord(99, 7, 9), MeshCoord(80, 0, 0))}.
    */
-  public static final MeshCoord LATITUDE_MAX = new MeshCoord(99, 7, 9);
+  public static final MeshNode MAX =
+      new MeshNode(MeshCoord.MAX, new MeshCoord(80, 0, 0, null), null);
 
-  /**
-   * Smallest {@code longitude} value.
-   *
-   * <p>Equals to {@code MeshCoord(0, 0, 0)}.
-   */
-  public static final MeshCoord LONGITUDE_MIN = new MeshCoord(0, 0, 0);
-
-  /**
-   * Largest {@code longitude} value.
-   *
-   * <p>Equals to {@code MeshCoord(80, 0, 0)}.
-   */
-  public static final MeshCoord LONGITUDE_MAX = new MeshCoord(80, 0, 0);
+  /*+ non-checked constructor */
+  protected MeshNode(final MeshCoord latitude, final MeshCoord longitude, Void sentinel) {
+    this.latitude = Objects.requireNonNull(latitude, "latitude");
+    this.longitude = longitude;
+  }
 
   /**
    * Makes a {@link MeshNode} instance.
@@ -90,7 +83,7 @@ public class MeshNode {
       throws ValueOutOfRangeException {
     Objects.requireNonNull(longitude, "longitude");
 
-    if (LONGITUDE_MAX.compareTo(longitude) < 0) {
+    if (MAX.longitude.compareTo(longitude) < 0) {
       throw new ValueOutOfRangeException("longitude");
     }
 
