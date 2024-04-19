@@ -44,6 +44,34 @@ public class MeshNode {
   protected final MeshCoord longitude;
 
   /**
+   * Smallest {@code latitude}.
+   *
+   * <p>Equals to {@code MeshCoord(0, 0, 0)}.
+   */
+  public static final MeshCoord LATITUDE_MIN = new MeshCoord(0, 0, 0);
+
+  /**
+   * Largest {@code latitude} value.
+   *
+   * <p>Equals to {@code MeshCoord(99, 7, 9)}.
+   */
+  public static final MeshCoord LATITUDE_MAX = new MeshCoord(99, 7, 9);
+
+  /**
+   * Smallest {@code longitude} value.
+   *
+   * <p>Equals to {@code MeshCoord(0, 0, 0)}.
+   */
+  public static final MeshCoord LONGITUDE_MIN = new MeshCoord(0, 0, 0);
+
+  /**
+   * Largest {@code longitude} value.
+   *
+   * <p>Equals to {@code MeshCoord(80, 0, 0)}.
+   */
+  public static final MeshCoord LONGITUDE_MAX = new MeshCoord(80, 0, 0);
+
+  /**
    * Makes a {@link MeshNode} instance.
    *
    * <h4>Example</h4>
@@ -62,16 +90,8 @@ public class MeshNode {
       throws ValueOutOfRangeException {
     Objects.requireNonNull(longitude, "longitude");
 
-    if (longitude.first == 80) {
-      if (longitude.second == 0) {
-        if (0 < longitude.third) {
-          throw new ValueOutOfRangeException("third of longitude");
-        }
-      } else if (0 < longitude.second) {
-        throw new ValueOutOfRangeException("second of longitude");
-      }
-    } else if (80 < longitude.first) {
-      throw new ValueOutOfRangeException("first of longitude");
+    if (LONGITUDE_MAX.compareTo(longitude) < 0) {
+      throw new ValueOutOfRangeException("longitude");
     }
 
     this.latitude = Objects.requireNonNull(latitude, "latitude");

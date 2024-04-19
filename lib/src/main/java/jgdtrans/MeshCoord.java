@@ -47,6 +47,24 @@ public class MeshCoord implements Comparable<MeshCoord> {
   protected final int second;
   protected final int third;
 
+  /** Largest {@code first} value. */
+  public static final int FIRST_MIN = 0;
+
+  /** Smallest {@code first} value. */
+  public static final int FIRST_MAX = 99;
+
+  /** Largest {@code second} value. */
+  public static final int SECOND_MIN = 0;
+
+  /** Smallest {@code second} value. */
+  public static final int SECOND_MAX = 7;
+
+  /** Largest {@code third} value. */
+  public static final int THIRD_MIN = 0;
+
+  /** Smallest {@code third} value. */
+  public static final int THIRD_MAX = 9;
+
   /**
    * Makes a {@link MeshCoord}.
    *
@@ -68,11 +86,11 @@ public class MeshCoord implements Comparable<MeshCoord> {
    */
   public MeshCoord(final int first, final int second, final int third)
       throws ValueOutOfRangeException {
-    if (first < 0 || 100 <= first) {
+    if (first < FIRST_MIN || FIRST_MAX < first) {
       throw new ValueOutOfRangeException("first");
-    } else if (second < 0 || 8 <= second) {
+    } else if (second < SECOND_MIN || SECOND_MAX < second) {
       throw new ValueOutOfRangeException("second");
-    } else if (third < 0 || 10 <= third) {
+    } else if (third < THIRD_MIN || THIRD_MAX < third) {
       throw new ValueOutOfRangeException("third");
     }
 
@@ -324,13 +342,13 @@ public class MeshCoord implements Comparable<MeshCoord> {
     final int bound = MeshUnit.ONE.equals(meshUnit) ? 9 : 5;
 
     if (this.third == bound) {
-      if (this.second == 7) {
-        if (this.first == 99) {
+      if (this.second == SECOND_MAX) {
+        if (this.first == THIRD_MAX) {
           throw new MeshCoordOverflowException();
         }
-        return new MeshCoord(this.first + 1, 0, 0);
+        return new MeshCoord(this.first + 1, SECOND_MIN, THIRD_MIN);
       }
-      return new MeshCoord(this.first, this.second + 1, 0);
+      return new MeshCoord(this.first, this.second + 1, THIRD_MIN);
     }
     return new MeshCoord(this.first, this.second, this.third + meshUnit.toInteger());
   }
@@ -367,12 +385,12 @@ public class MeshCoord implements Comparable<MeshCoord> {
 
     final int bound = MeshUnit.ONE.equals(meshUnit) ? 9 : 5;
 
-    if (this.third == 0) {
-      if (this.second == 0) {
-        if (this.first == 0) {
+    if (this.third == THIRD_MIN) {
+      if (this.second == SECOND_MIN) {
+        if (this.first == THIRD_MIN) {
           throw new MeshCoordOverflowException();
         }
-        return new MeshCoord(this.first - 1, 7, bound);
+        return new MeshCoord(this.first - 1, SECOND_MAX, bound);
       }
       return new MeshCoord(this.first, this.second - 1, bound);
     }
