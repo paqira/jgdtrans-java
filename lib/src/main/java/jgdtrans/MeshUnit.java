@@ -47,7 +47,7 @@ public enum MeshUnit {
    *
    * @return {@code 1} or {@code 5}.
    */
-  public int toInteger() {
+  protected int toInteger() {
     switch (this) {
       case ONE:
         return 1;
