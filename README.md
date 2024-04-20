@@ -35,7 +35,7 @@ Features:
 
 ## Usage
 
-`jgdtrans` supports `Java 8` and higher.
+`jgdtrans` supports `Java8` and higher.
 
 This package does not contain parameter files, download it from GIAJ.
 
@@ -52,7 +52,7 @@ import paqira.jgdtrans.*;
 
 public class Main {
     public static void main(String[] args)
-            throws CorrectionNotFoundException, ParameterNotFoundException, ParseParException {
+            throws IOException, CorrectionNotFoundException, ParameterNotFoundException, ParseParException {
         File file = new File("SemiDyna2023.par");
         String contents = Files.readString(file.toPath(), StandardCharsets.UTF_8);
         
@@ -86,8 +86,7 @@ Apache-2.0
 ## Reference
 
 1. Geospatial Information Authority of Japan (GIAJ, 国土地理院):
-   <https://www.gsi.go.jp/>,
-   (English) <https://www.gsi.go.jp/ENGLISH/>.
+   <https://www.gsi.go.jp/>, (English) <https://www.gsi.go.jp/ENGLISH/>.
 2. _TKY2JGD for Windows Ver.1.3.79_ (reference implementation):
    <https://www.gsi.go.jp/sokuchikijun/tky2jgd_download.html>
    released under [国土地理院コンテンツ利用規約] which compatible to CC BY 4.0.

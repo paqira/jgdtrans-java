@@ -53,7 +53,7 @@
  *
  * public class Main {
  *     public static void main(String[] args)
- *             throws CorrectionNotFoundException, ParameterNotFoundException, ParseParException {
+ *             throws IOException, CorrectionNotFoundException, ParameterNotFoundException, ParseParException {
  *         File file = new File("SemiDyna2023.par");
  *         String contents = Files.readString(file.toPath(), StandardCharsets.UTF_8);
  *
@@ -64,17 +64,17 @@
  *
  *         // forward transformation
  *         Point result = tf.forward(origin);
- *         // prints Point(latitude=36.103773017086695, longitude=140.08785924333452, altitude=2.4363138578103)
+ *         // prints Point[latitude=36.103773017086695, longitude=140.08785924333452, altitude=2.4363138578103]
  *         System.out.println(result);
  *
  *         // backward transformation
  *         Point p = tf.backward(result);
- *         // prints Point(latitude=36.10377479000002, longitude=140.087855041, altitude=2.339999999578243)
+ *         // prints Point[latitude=36.10377479000002, longitude=140.087855041, altitude=2.339999999578243
  *         System.out.println(p);
  *
  *         // verified backward transformation
  *         Point q = tf.backwardSafe(result);
- *         // prints Point(latitude=36.10377479, longitude=140.087855041, altitude=2.3399999999970085)
+ *         // prints Point[latitude=36.10377479, longitude=140.087855041, altitude=2.3399999999970085
  *         System.out.println(q);
  *     }
  * }
