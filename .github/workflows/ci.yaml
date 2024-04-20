@@ -23,13 +23,18 @@ jobs:
           cache: gradle
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+#     GJF does not support @snippet, see issues/886.
+#     Hence, check before code snippet patch.
+      - name: Check
+        run: gradle check
       - name: Patch code snippet
         run: |
           find lib/src/main/java -type f | xargs sed -i -e 's/<pre>{@code/{@snippet lang="java" :/'
           find lib/src/main/java -type f | xargs sed -i -e 's/<\/pre>//'
-#         BTW, GJF does not support @snippet, see issues/886
-      - name: Build (with Check/Test)
-        run: gradle build
+      - name: Build jar, javadocJar sourcesJar and javadoc
+        run: gradle assemble
+      - name: Test
+        run: gradle test
   java8:
     runs-on: ubuntu-latest
     steps:
@@ -53,5 +58,7 @@ jobs:
           cat gradle/libs.versions.toml
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+      - name: Build jar
+        run: gradle jar
       - name: Test
         run: gradle test
