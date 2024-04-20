@@ -16,11 +16,15 @@
 package jgdtrans;
 
 /** Provides utility methods for operating {@code Mesh} etc. */
-public class Meshs {
+public class Meshes {
+  private Meshes() {
+    throw new RuntimeException();
+  }
+
   /**
    * Returns {@code true} when {@code meshcode} is valid.
    *
-   * <h2>Example</h2>
+   * <h4>Example</h4>
    *
    * <pre>{@code
    * assert isMeshcode(54401027) == true;

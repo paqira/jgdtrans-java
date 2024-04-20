@@ -22,10 +22,10 @@ import org.junit.jupiter.api.Test;
 public class MeshsTest {
   @Test
   void constructor() {
-    assertTrue(Meshs.isMeshcode(54401027));
-    assertFalse(Meshs.isMeshcode(-1));
-    assertFalse(Meshs.isMeshcode(100000000));
-    assertFalse(Meshs.isMeshcode(10810000));
-    assertFalse(Meshs.isMeshcode(10000800));
+    assertTrue(Meshes.isMeshcode(54401027));
+    assertFalse(Meshes.isMeshcode(-1));
+    assertFalse(Meshes.isMeshcode(100000000));
+    assertFalse(Meshes.isMeshcode(10810000));
+    assertFalse(Meshes.isMeshcode(10000800));
   }
 }
