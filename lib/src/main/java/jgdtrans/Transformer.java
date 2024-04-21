@@ -628,7 +628,7 @@ public class Transformer {
       final double delta_x = point.longitude - (xn + correction.longitude);
       final double delta_y = point.latitude - (yn + correction.latitude);
 
-      if (Math.abs(delta_x) <= CRITERIA && Math.abs(delta_y) <= CRITERIA) {
+      if (Math.abs(delta_x) < CRITERIA && Math.abs(delta_y) < CRITERIA) {
         return new Correction(-correction.latitude, -correction.longitude, -correction.altitude);
       }
     }
