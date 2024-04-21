@@ -52,7 +52,7 @@ import java.util.Optional;
  *
  * // Verified backward transformation
  * tf.backwardSafe(new Point(36.103773017086695, 140.08785924333452, 2.4363138578103));
- * // returns Point[latitude=36.10377479, longitude=140.087855041, altitude=2.3399999999970085]
+ * // returns Point[latitude=36.10377479, longitude=140.087855041, altitude=2.34]
  * }</pre>
  */
 public class Transformer {
