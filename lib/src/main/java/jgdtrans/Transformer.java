@@ -344,7 +344,7 @@ public class Transformer {
    * Returns the validated backward-transformed position.
    *
    * <p>The result's drifting from the exact solution is less than error of the GIAJ latitude and
-   * longitude parameter, {@code 2.7e-9} [deg], for each latitude and longitude. The altitude's
+   * longitude parameter, {@code 1e-9} [deg], for each latitude and longitude. The altitude's
    * drifting is less than {@code 1e-5} [m] which is error of the GIAJ altitude parameter.
    *
    * <p>The {@link Point#latitude()} should satisfy {@code 0.0 <=} and {@code <= 66.666...} and the
@@ -364,8 +364,10 @@ public class Transformer {
    *
    * Transformer tf = new Transformer(Format.SemiDynaEXE, m);
    *
+   * // The origin is forward transformation from Point(36.10377479, 140.087855041, 2.34).
+   * // In this case, no error remains
    * Point point = tf.backwardSafe(new Point(36.103773017086695, 140.08785924333452, 2.4363138578103));
-   * assert point.equals(new Point(36.10377479, 140.087855041, 2.3399999999970085));
+   * assert point.equals(new Point(36.10377479, 140.087855041, 2.34));
    * }</pre>
    *
    * @param point The origin of transformation, <strong>may not be null</strong>.
@@ -536,7 +538,7 @@ public class Transformer {
    * Transformer tf = new Transformer(Format.SemiDynaEXE, m);
    *
    * Point point = tf.backwardSafeCorrection(new Point(36.103773017086695, 140.08785924333452, 2.4363138578103));
-   * assert point.equals(new Correction(1.772913310099049e-06, -4.202334510033827e-06, -0.0963138578132916));
+   * assert point.equals(new Correction(1.7729133100878255e-06, -4.202334510058886e-06, -0.09631385781030007));
    * }</pre>
    *
    * @param point The origin of transformation, <strong>may not be null</strong>.
@@ -552,8 +554,8 @@ public class Transformer {
     Objects.requireNonNull(point, "point");
 
     final double SCALE = 3600.;
-    final double CRITERIA = 2.5e-9;
-    final int ITERATION = 3;
+    final double CRITERIA = 5e-14;
+    final int ITERATION = 4;
 
     double yn = point.latitude;
     double xn = point.longitude;
@@ -610,7 +612,7 @@ public class Transformer {
       a2 = quadruple.ne.latitude - quadruple.nw.latitude;
       final double fy_x = -(a1 * (1.0 - yn) + a2 * yn) / SCALE;
 
-      a1 = quadruple.ne.latitude - quadruple.sw.latitude;
+      a1 = quadruple.nw.latitude - quadruple.sw.latitude;
       a2 = quadruple.ne.latitude - quadruple.se.latitude;
       final double fy_y = -1.0 - (a1 * (1.0 - xn) + a2 * xn) / SCALE;
 
