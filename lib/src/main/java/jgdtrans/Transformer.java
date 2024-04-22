@@ -301,9 +301,8 @@ public class Transformer {
    * <p>The {@link Point#latitude()} should satisfy {@code 0.0 <=} and {@code <= 66.666...} and the
    * {@link Point#longitude()} does {@code 100.0 <=} and {@code <= 180.0}.
    *
-   * <p>This is compatible to GIAJ web app/APIs.
-   *
-   * <p>This is <strong>not</strong> exact as the original as.
+   * <p>This is compatible to GIAJ web app/APIs, and is <strong>not</strong> exact as the original
+   * as.
    *
    * <p>This is formally equivalent to {@code point + this.backwardCorrection(point)}.
    *
@@ -346,7 +345,7 @@ public class Transformer {
    * <p>The {@link Point#latitude()} should satisfy {@code 0.0 <=} and {@code <= 66.666...} and the
    * *{@link Point#longitude()} does {@code 100.0 <=} and {@code <= 180.0}.
    *
-   * <p>The result's error is suppressed under {@link Transformer#ERROR_MAX}.
+   * <p>The result's error from an exact solution is suppressed under {@link Transformer#ERROR_MAX}.
    *
    * <p>Notes, the error is less than 1e-9 [deg], which is error of GIAJ latitude and longitude
    * parameter. This implies that altitude's error is less than 1e-5 [m], which is error of the GIAJ
