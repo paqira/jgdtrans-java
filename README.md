@@ -55,26 +55,26 @@ public class Main {
             throws IOException, CorrectionNotFoundException, ParameterNotFoundException, ParseParException {
         File file = new File("SemiDyna2023.par");
         String contents = Files.readString(file.toPath(), StandardCharsets.UTF_8);
-        
+
         Transformer tf = Transformer.fromString(contents, Format.SemiDynaEXE);
-        
+
         // Geospatial Information Authority of Japan
         Point origin = new Point(36.10377479, 140.087855041, 2.34);
-        
+
         // forward transformation
         Point result = tf.forward(origin);
         // prints Point[latitude=36.103773017086695, longitude=140.08785924333452, altitude=2.4363138578103]
         System.out.println(result);
-        
-        // backward transformation
+
+        // backward transformation 
+        Point p = tf.backwardSafe(result);
+        // prints Point[latitude=36.10377479, longitude=140.087855041, altitude=2.34]
+        System.out.println(p);
+
+        // backward transformation compatible to GIAJ web app/APIs
         Point p = tf.backward(result);
         // prints Point[latitude=36.10377479000002, longitude=140.087855041, altitude=2.339999999578243]
         System.out.println(p);
-        
-        // verified backward transformation
-        Point q = tf.backwardSafe(result);
-        // prints Point[latitude=36.10377479, longitude=140.087855041, altitude=2.34]
-        System.out.println(q);
     }
 }
 ```

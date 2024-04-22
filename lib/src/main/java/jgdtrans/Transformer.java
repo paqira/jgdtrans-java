@@ -56,6 +56,12 @@ import java.util.Optional;
  * }</pre>
  */
 public class Transformer {
+  /**
+   * Max error of {@link Transformer#backward(Point)} and {@link
+   * Transformer#backwardCorrection(Point)}
+   */
+  public static final double ERROR_MAX = 5e-14;
+
   /** not null */
   private final Format format;
 
@@ -290,20 +296,14 @@ public class Transformer {
   }
 
   /**
-   * Returns the backward-transformed position.
+   * Returns the backward-transformed position compatible to GIAJ web app/APIs.
    *
    * <p>The {@link Point#latitude()} should satisfy {@code 0.0 <=} and {@code <= 66.666...} and the
    * {@link Point#longitude()} does {@code 100.0 <=} and {@code <= 180.0}.
    *
-   * <p>This is <em>not</em> exact as the original <em>TKY2JGD for Windows Ver.1.3.79</em> and the
-   * web APIs are (as far as we researched).
+   * <p>This is compatible to GIAJ web app/APIs.
    *
-   * <p>There are points where unable to perform backward transformation even if they are the
-   * results of the forward transformation, because the forward transformation moves them to the
-   * area where the parameter does not support.
-   *
-   * <p>We note that {@link Transformer#backwardSafe(Point)} performs verified backward
-   * transformation.
+   * <p>This is <strong>not</strong> exact as the original as.
    *
    * <p>This is formally equivalent to {@code point + this.backwardCorrection(point)}.
    *
@@ -328,12 +328,12 @@ public class Transformer {
    * @throws ParameterNotFoundException When the parameter not found.
    * @throws ParameterNotFoundException When the parameter is not found.
    * @throws PointOutOfRangeException When the {@code point} is ouf-of-bounds.
-   * @see Transformer#backwardCorrection(Point)
-   * @see Transformer#backwardSafe(Point)
+   * @see Transformer#backwardCompatCorrection(Point)
+   * @see Transformer#backward(Point)
    */
-  public Point backward(final Point point)
+  public Point backwardCompat(final Point point)
       throws ParameterNotFoundException, PointOutOfRangeException {
-    final Correction correction = this.backwardCorrection(point);
+    final Correction correction = this.backwardCompatCorrection(point);
     return new Point(
         point.latitude + correction.latitude,
         point.longitude + correction.longitude,
@@ -341,14 +341,18 @@ public class Transformer {
   }
 
   /**
-   * Returns the validated backward-transformed position.
-   *
-   * <p>The result's drifting from the exact solution is less than error of the GIAJ latitude and
-   * longitude parameter, {@code 1e-9} [deg], for each latitude and longitude. The altitude's
-   * drifting is less than {@code 1e-5} [m] which is error of the GIAJ altitude parameter.
+   * Returns the backward-transformed position.
    *
    * <p>The {@link Point#latitude()} should satisfy {@code 0.0 <=} and {@code <= 66.666...} and the
-   * {@link Point#longitude()} does {@code 100.0 <=} and {@code <= 180.0}.
+   * *{@link Point#longitude()} does {@code 100.0 <=} and {@code <= 180.0}.
+   *
+   * <p>The result's error is suppressed under {@link Transformer#ERROR_MAX}.
+   *
+   * <p>Notes, the error is less than 1e-9 [deg], which is error of GIAJ latitude and longitude
+   * parameter. This implies that altitude's error is less than 1e-5 [m], which is error of the GIAJ
+   * altitude parameter.
+   *
+   * <p>This is not compatible to GIAJ web app/APIs (but more accurate).
    *
    * <p>This is formally equivalent to {@code point + this.backwardSafeCorrection(point)}.
    *
@@ -375,12 +379,12 @@ public class Transformer {
    * @throws ParameterNotFoundException When parameter is not found.
    * @throws CorrectionNotFoundException When verification failed.
    * @throws PointOutOfRangeException When the {@code point} is ouf-of-bounds.
-   * @see Transformer#backwardSafeCorrection(Point)
-   * @see Transformer#backward(Point)
+   * @see Transformer#backwardCorrection(Point)
+   * @see Transformer#backwardCompat(Point)
    */
-  public Point backwardSafe(final Point point)
+  public Point backward(final Point point)
       throws CorrectionNotFoundException, ParameterNotFoundException, PointOutOfRangeException {
-    final Correction correction = this.backwardSafeCorrection(point);
+    final Correction correction = this.backwardCorrection(point);
     return new Point(
         point.latitude + correction.latitude,
         point.longitude + correction.longitude,
@@ -466,12 +470,12 @@ public class Transformer {
   }
 
   /**
-   * Return the correction on backward-transformation.
+   * Return the correction on backward-transformation compatible to GIAJ web app/APIs.
    *
    * <p>The {@link Point#latitude()} should satisfy {@code 0.00333... <=} and {@code <= 66.666...}
    * and the {@link Point#longitude()} does {@code 100.0 <=} and {@code <= 180.0}.
    *
-   * <p>This is used by {@link Transformer#backward(Point)}.
+   * <p>This is used by {@link Transformer#backwardCompat(Point)}.
    *
    * <h4>Example</h4>
    *
@@ -493,10 +497,10 @@ public class Transformer {
    * @return The correction on backward transformation, <strong>not null</strong>.
    * @throws ParameterNotFoundException When the parameter is not found.
    * @throws PointOutOfRangeException When the {@code point} is ouf-of-bounds.
-   * @see Transformer#backward(Point)
-   * @see Transformer#backwardSafeCorrection(Point)
+   * @see Transformer#backwardCompat(Point)
+   * @see Transformer#backwardCorrection(Point)
    */
-  public Correction backwardCorrection(final Point point)
+  public Correction backwardCompatCorrection(final Point point)
       throws ParameterNotFoundException, PointOutOfRangeException {
     Objects.requireNonNull(point, "point");
 
@@ -518,12 +522,12 @@ public class Transformer {
   }
 
   /**
-   * Return the verified correction on backward-transformation.
+   * Return the correction on backward-transformation.
    *
    * <p>The {@link Point#latitude()} should satisfy {@code 0.0 <=} and {@code <= 66.666...} and the
    * {@link Point#longitude()} does {@code 100.0 <=} and {@code <= 180.0}.
    *
-   * <p>This is used by {@link Transformer#backwardSafe(Point)}.
+   * <p>This is used by {@link Transformer#backward(Point)}.
    *
    * <h4>Example</h4>
    *
@@ -546,15 +550,14 @@ public class Transformer {
    * @throws ParameterNotFoundException When the parameter is not found.
    * @throws CorrectionNotFoundException When verification failed.
    * @throws PointOutOfRangeException When the {@code point} is ouf-of-bounds.
-   * @see Transformer#backwardSafe(Point)
-   * @see Transformer#backwardCorrection(Point)
+   * @see Transformer#backward(Point)
+   * @see Transformer#backwardCompatCorrection(Point)
    */
-  public Correction backwardSafeCorrection(final Point point)
+  public Correction backwardCorrection(final Point point)
       throws CorrectionNotFoundException, ParameterNotFoundException, PointOutOfRangeException {
     Objects.requireNonNull(point, "point");
 
     final double SCALE = 3600.;
-    final double CRITERIA = 5e-14;
     final int ITERATION = 4;
 
     double yn = point.latitude;
@@ -628,7 +631,7 @@ public class Transformer {
       final double delta_x = point.longitude - (xn + correction.longitude);
       final double delta_y = point.latitude - (yn + correction.latitude);
 
-      if (Math.abs(delta_x) < CRITERIA && Math.abs(delta_y) < CRITERIA) {
+      if (Math.abs(delta_x) < ERROR_MAX && Math.abs(delta_y) < ERROR_MAX) {
         return new Correction(-correction.latitude, -correction.longitude, -correction.altitude);
       }
     }

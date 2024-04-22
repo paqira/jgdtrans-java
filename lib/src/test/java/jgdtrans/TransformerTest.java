@@ -48,7 +48,7 @@ class TransformerTest {
     assertEquals(0.0, actual.altitude);
 
     origin = new Point(36.10696628160147, 140.08457686629436, 0.0);
-    actual = tf.backward(origin);
+    actual = tf.backwardCompat(origin);
     assertEquals(36.103774792, actual.latitude, 0.00000001);
     assertEquals(140.087855042, actual.longitude, 0.00000001);
     assertEquals(0.0, actual.altitude);
@@ -78,7 +78,7 @@ class TransformerTest {
     assertEquals(-1.263, actual.altitude, 0.001);
 
     origin = new Point(38.29849530463122, 141.55596301776936, 0.0);
-    actual = tf.backward(origin);
+    actual = tf.backwardCompat(origin);
     assertEquals(38.298512058, actual.latitude, 0.00000001);
     assertEquals(141.555900614, actual.longitude, 0.00000001);
     assertEquals(1.264, actual.altitude, 0.001);
@@ -104,7 +104,7 @@ class TransformerTest {
     assertEquals(0.096, actual.altitude, 0.001);
 
     origin = new Point(36.10377301875336, 140.08785924400115, 0.0);
-    actual = tf.backward(origin);
+    actual = tf.backwardCompat(origin);
     assertEquals(36.103774792, actual.latitude, 0.00000001);
     assertEquals(140.087855042, actual.longitude, 0.00000001);
     assertEquals(-0.096, actual.altitude, 0.001);
@@ -116,7 +116,7 @@ class TransformerTest {
     assertEquals(140.08785924400115, actual.longitude, 0.000000000001);
     assertEquals(0.09631385775572238, actual.altitude, 0.000000000001);
 
-    actual = tf.backward(actual);
+    actual = tf.backwardCompat(actual);
     assertEquals(36.10377479166668, actual.latitude, 0.000000000001);
     assertEquals(140.08785504166664, actual.longitude, 0.000000000001);
     assertEquals(-4.2175864502150125955e-10, actual.altitude, 0.000000000001);
