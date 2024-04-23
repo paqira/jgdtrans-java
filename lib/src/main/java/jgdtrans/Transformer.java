@@ -601,7 +601,7 @@ public class Transformer {
       final double fy_y = -1.0 - (a1 * (1.0 - xn) + a2 * xn) / SCALE;
 
       // det
-      final double det = fx_x * fy_y - fy_x * fy_x;
+      final double det = fx_x * fy_y - fx_y * fy_x;
 
       xn -= (fy_y * fx - fx_y * fy) / det;
       yn -= (fx_x * fy - fy_x * fx) / det;
