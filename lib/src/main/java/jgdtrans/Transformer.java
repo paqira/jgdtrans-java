@@ -776,9 +776,7 @@ public class Transformer {
     private final Map<Integer, Parameter> parameter;
     private String description;
 
-    /**
-     * Makes a {@link Builder} instance.
-     */
+    /** Makes a {@link Builder} instance. */
     public Builder() {
       this.format = null;
       this.parameter = new HashMap<>();
@@ -787,6 +785,7 @@ public class Transformer {
 
     /**
      * Set a {@link Format}.
+     *
      * @param format the format of par file, <strong>may not be null</strong>.
      * @return A {@link Builder} instance, <strong>not null</strong>.
      * @throws NullPointerException when {@code format} is {@code null}.
@@ -798,6 +797,7 @@ public class Transformer {
 
     /**
      * Set a parameter.
+     *
      * @param meshcode the meshcode.
      * @param latitude the latitude parameter.
      * @param longitude the longitude parameter.
@@ -811,6 +811,7 @@ public class Transformer {
 
     /**
      * Set a parameter.
+     *
      * @param meshcode the meshcode.
      * @param parameter a parameter, <strong>not null</strong>.
      * @return A {@link Builder} instance, <strong>not null</strong>.
@@ -822,7 +823,9 @@ public class Transformer {
 
     /**
      * Set a parameter.
-     * @param parameter a parameter, a pair of the meshcode and a {@link Parameter}, <strong>may not be null</strong>.
+     *
+     * @param parameter a parameter, a pair of the meshcode and a {@link Parameter}, <strong>may not
+     *     be null</strong>.
      * @return A {@link Builder} instance, <strong>not null</strong>.
      */
     public Builder parameter(final Map.Entry<Integer, ? extends Parameter> parameter) {
@@ -831,6 +834,7 @@ public class Transformer {
 
     /**
      * Set parameters.
+     *
      * @param parameters parameters.
      * @return A {@link Builder} instance, <strong>not null</strong>.
      */
@@ -841,6 +845,7 @@ public class Transformer {
 
     /**
      * Set parameters.
+     *
      * @param parameters parameters, <strong>may not be null</strong>.
      * @return A {@link Builder} instance, <strong>not null</strong>.
      */
@@ -852,6 +857,7 @@ public class Transformer {
 
     /**
      * Set parameters.
+     *
      * @param parameters parameters, <strong>may not be null</strong>.
      * @return A {@link Builder} instance, <strong>not null</strong>.
      */
@@ -863,6 +869,7 @@ public class Transformer {
 
     /**
      * Set parameters.
+     *
      * @param parameters parameters, <strong>may not be null</strong>.
      * @return A {@link Builder} instance, <strong>not null</strong>.
      */
@@ -872,6 +879,7 @@ public class Transformer {
 
     /**
      * Set description.
+     *
      * @param description description.
      * @return A {@link Builder} instance, <strong>not null</strong>.
      */
@@ -882,6 +890,7 @@ public class Transformer {
 
     /**
      * Returns a {@link Transformer} instance.
+     *
      * @return A {@link Transformer} instance, <strong>not null</strong>.
      * @throws NullPointerException when {@code format} is not assigned.
      */
