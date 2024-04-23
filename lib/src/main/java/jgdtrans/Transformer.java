@@ -18,9 +18,7 @@ package jgdtrans;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * The coordinate Transformer, and represents a deserializing result of par file.
@@ -193,6 +191,32 @@ public class Transformer {
     } catch (final IOException neverHappen) {
       throw new RuntimeException("UNREACHABLE");
     }
+  }
+
+  /**
+   * Returns of a {@link Transformer} instance.
+   *
+   * <h4>Example</h4>
+   *
+   * <pre>{@code
+   * Transformer tf = Transformer.builder()
+   *     .format(Format.SemiDynaEXE)
+   *     .parameter(54401005, new Parameter(-0.00622, 0.01516, 0.0946))
+   *     .parameter(54401055, new Parameter(-0.0062, 0.01529, 0.08972))
+   *     .parameter(54401100, new Parameter(-0.00663, 0.01492, 0.10374))
+   *     .parameter(54401150, new Parameter(-0.00664, 0.01506, 0.10087))
+   *     .description("From SemiDynaEXE")
+   *     .build();
+   *
+   * assert tf.format().equals(Format.SemiDynaEXE);
+   * assert tf.parameter().get(54401005).equals(new Parameter(-0.00622, 0.01516, 0.0946));
+   * assert tf.description().equals(Optional.empty("From SemiDynaEXE"));
+   * }</pre>
+   *
+   * @return A {@link Builder} instance, <strong>not null</strong>.
+   */
+  public static Builder builder() {
+    return new Builder();
   }
 
   private static double bilinearInterpolation(
@@ -724,6 +748,148 @@ public class Transformer {
       this.se = se;
       this.nw = nw;
       this.ne = ne;
+    }
+  }
+
+  /**
+   * Builder of {@link Transformer}.
+   *
+   * <h2>Example</h2>
+   *
+   * <pre>{@code
+   * Transformer tf = new Transformer.Builder()
+   *     .format(Format.SemiDynaEXE)
+   *     .parameter(54401005, new Parameter(-0.00622, 0.01516, 0.0946))
+   *     .parameter(54401055, new Parameter(-0.0062, 0.01529, 0.08972))
+   *     .parameter(54401100, new Parameter(-0.00663, 0.01492, 0.10374))
+   *     .parameter(54401150, new Parameter(-0.00664, 0.01506, 0.10087))
+   *     .description("From SemiDynaEXE")
+   *     .build();
+   *
+   * assert tf.format().equals(Format.SemiDynaEXE);
+   * assert tf.parameter().get(54401005).equals(new Parameter(-0.00622, 0.01516, 0.0946));
+   * assert tf.description().equals(Optional.empty("From SemiDynaEXE"));
+   * }</pre>
+   */
+  public static class Builder {
+    private Format format;
+    private final Map<Integer, Parameter> parameter;
+    private String description;
+
+    /**
+     * Makes a {@link Builder} instance.
+     */
+    public Builder() {
+      this.format = null;
+      this.parameter = new HashMap<>();
+      this.description = null;
+    }
+
+    /**
+     * Set a {@link Format}.
+     * @param format the format of par file, <strong>may not be null</strong>.
+     * @return A {@link Builder} instance, <strong>not null</strong>.
+     * @throws NullPointerException when {@code format} is {@code null}.
+     */
+    public Builder format(final Format format) {
+      this.format = Objects.requireNonNull(format, "format");
+      return this;
+    }
+
+    /**
+     * Set a parameter.
+     * @param meshcode the meshcode.
+     * @param latitude the latitude parameter.
+     * @param longitude the longitude parameter.
+     * @param altitude the altitude parameter.
+     * @return A {@link Builder} instance, <strong>not null</strong>.
+     */
+    public Builder parameter(
+        final int meshcode, final double latitude, final double longitude, final double altitude) {
+      return this.parameter(meshcode, new Parameter(latitude, longitude, altitude));
+    }
+
+    /**
+     * Set a parameter.
+     * @param meshcode the meshcode.
+     * @param parameter a parameter, <strong>not null</strong>.
+     * @return A {@link Builder} instance, <strong>not null</strong>.
+     */
+    public Builder parameter(final int meshcode, final Parameter parameter) {
+      this.parameter.put(meshcode, parameter);
+      return this;
+    }
+
+    /**
+     * Set a parameter.
+     * @param parameter a parameter, a pair of the meshcode and a {@link Parameter}, <strong>may not be null</strong>.
+     * @return A {@link Builder} instance, <strong>not null</strong>.
+     */
+    public Builder parameter(final Map.Entry<Integer, ? extends Parameter> parameter) {
+      return this.parameter(parameter.getKey(), parameter.getValue());
+    }
+
+    /**
+     * Set parameters.
+     * @param parameters parameters.
+     * @return A {@link Builder} instance, <strong>not null</strong>.
+     */
+    public Builder parameters(final Map.Entry<Integer, ? extends Parameter>[] parameters) {
+      Arrays.stream(parameters).forEach(this::parameter);
+      return this;
+    }
+
+    /**
+     * Set parameters.
+     * @param parameters parameters, <strong>may not be null</strong>.
+     * @return A {@link Builder} instance, <strong>not null</strong>.
+     */
+    public Builder parameters(
+        final List<? extends Map.Entry<Integer, ? extends Parameter>> parameters) {
+      parameters.forEach(this::parameter);
+      return this;
+    }
+
+    /**
+     * Set parameters.
+     * @param parameters parameters, <strong>may not be null</strong>.
+     * @return A {@link Builder} instance, <strong>not null</strong>.
+     */
+    public Builder parameters(
+        final Set<? extends Map.Entry<Integer, ? extends Parameter>> parameters) {
+      parameters.forEach(this::parameter);
+      return this;
+    }
+
+    /**
+     * Set parameters.
+     * @param parameters parameters, <strong>may not be null</strong>.
+     * @return A {@link Builder} instance, <strong>not null</strong>.
+     */
+    public Builder parameters(final Map<Integer, ? extends Parameter> parameters) {
+      return this.parameters(parameters.entrySet());
+    }
+
+    /**
+     * Set description.
+     * @param description description.
+     * @return A {@link Builder} instance, <strong>not null</strong>.
+     */
+    public Builder description(final String description) {
+      this.description = description;
+      return this;
+    }
+
+    /**
+     * Returns a {@link Transformer} instance.
+     * @return A {@link Transformer} instance, <strong>not null</strong>.
+     * @throws NullPointerException when {@code format} is not assigned.
+     */
+    public Transformer build() {
+      return new Transformer(
+          Objects.requireNonNull(this.format, "format is not assigned"),
+          this.parameter,
+          this.description);
     }
   }
 }
