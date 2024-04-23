@@ -455,39 +455,14 @@ public class Transformer {
       throw new PointOutOfRangeException(e);
     }
 
-    final Quadruple quadruple = this.parameterQuadruple(cell);
+    final Interpol quadruple = Interpol.of(this.parameter, cell);
     final MeshCell.Position position = cell.position(point);
 
     final double SCALE = 3600.0;
 
-    final double latitude =
-        bilinearInterpolation(
-                quadruple.sw.latitude,
-                quadruple.se.latitude,
-                quadruple.nw.latitude,
-                quadruple.ne.latitude,
-                position.y,
-                position.x)
-            / SCALE;
-
-    final double longitude =
-        bilinearInterpolation(
-                quadruple.sw.longitude,
-                quadruple.se.longitude,
-                quadruple.nw.longitude,
-                quadruple.ne.longitude,
-                position.y,
-                position.x)
-            / SCALE;
-
-    final double altitude =
-        bilinearInterpolation(
-            quadruple.sw.altitude,
-            quadruple.se.altitude,
-            quadruple.nw.altitude,
-            quadruple.ne.altitude,
-            position.y,
-            position.x);
+    final double latitude = quadruple.latitude(position, SCALE);
+    final double longitude = quadruple.longitude(position, SCALE);
+    final double altitude = quadruple.altitude(position);
 
     return new Correction(latitude, longitude, altitude);
   }
@@ -583,8 +558,8 @@ public class Transformer {
     final double SCALE = 3600.;
     final int ITERATION = 4;
 
-    double yn = point.latitude;
     double xn = point.longitude;
+    double yn = point.latitude;
 
     for (int i = 0; i < ITERATION; i++) {
       final Point current = new Point(yn, xn, 0.0);
@@ -595,28 +570,11 @@ public class Transformer {
       } catch (final Exception e) {
         throw new PointOutOfRangeException(e);
       }
-      final Quadruple quadruple = parameterQuadruple(cell);
+      final Interpol interpol = Interpol.of(this.parameter, cell);
       final MeshCell.Position position = cell.position(current);
 
-      final double corr_y =
-          bilinearInterpolation(
-                  quadruple.sw.latitude,
-                  quadruple.se.latitude,
-                  quadruple.nw.latitude,
-                  quadruple.ne.latitude,
-                  position.y,
-                  position.x)
-              / SCALE;
-
-      final double corr_x =
-          bilinearInterpolation(
-                  quadruple.sw.longitude,
-                  quadruple.se.longitude,
-                  quadruple.nw.longitude,
-                  quadruple.ne.longitude,
-                  position.y,
-                  position.x)
-              / SCALE;
+      final double corr_x = interpol.longitude(position, SCALE);
+      final double corr_y = interpol.latitude(position, SCALE);
 
       final double fx = point.longitude - (xn + corr_x);
       final double fy = point.latitude - (yn + corr_y);
@@ -626,20 +584,20 @@ public class Transformer {
       double a1;
       double a2;
 
-      a1 = quadruple.se.longitude - quadruple.sw.longitude;
-      a2 = quadruple.ne.longitude - quadruple.nw.longitude;
+      a1 = interpol.se.longitude - interpol.sw.longitude;
+      a2 = interpol.ne.longitude - interpol.nw.longitude;
       final double fx_x = -1.0 - (a1 * (1.0 - yn) + a2 * yn) / SCALE;
 
-      a1 = quadruple.nw.longitude - quadruple.sw.longitude;
-      a2 = quadruple.ne.longitude - quadruple.se.longitude;
+      a1 = interpol.nw.longitude - interpol.sw.longitude;
+      a2 = interpol.ne.longitude - interpol.se.longitude;
       final double fx_y = -(a1 * (1.0 - xn) + a2 * xn) / SCALE;
 
-      a1 = quadruple.se.latitude - quadruple.sw.latitude;
-      a2 = quadruple.ne.latitude - quadruple.nw.latitude;
+      a1 = interpol.se.latitude - interpol.sw.latitude;
+      a2 = interpol.ne.latitude - interpol.nw.latitude;
       final double fy_x = -(a1 * (1.0 - yn) + a2 * yn) / SCALE;
 
-      a1 = quadruple.nw.latitude - quadruple.sw.latitude;
-      a2 = quadruple.ne.latitude - quadruple.se.latitude;
+      a1 = interpol.nw.latitude - interpol.sw.latitude;
+      a2 = interpol.ne.latitude - interpol.se.latitude;
       final double fy_y = -1.0 - (a1 * (1.0 - xn) + a2 * xn) / SCALE;
 
       // det
@@ -660,36 +618,6 @@ public class Transformer {
     }
 
     throw new CorrectionNotFoundException();
-  }
-
-  private Quadruple parameterQuadruple(final MeshCell cell) throws ParameterNotFoundException {
-    int meshcode;
-
-    meshcode = cell.southWest.toMeshcode();
-    final Parameter sw = this.parameter.get(meshcode);
-    if (Objects.isNull(sw)) {
-      throw new ParameterNotFoundException("south west");
-    }
-
-    meshcode = cell.southEast.toMeshcode();
-    final Parameter se = this.parameter.get(meshcode);
-    if (Objects.isNull(se)) {
-      throw new ParameterNotFoundException("south east");
-    }
-
-    meshcode = cell.northWest.toMeshcode();
-    final Parameter nw = this.parameter.get(meshcode);
-    if (Objects.isNull(nw)) {
-      throw new ParameterNotFoundException("north west");
-    }
-
-    meshcode = cell.northEast.toMeshcode();
-    final Parameter ne = this.parameter.get(meshcode);
-    if (Objects.isNull(ne)) {
-      throw new ParameterNotFoundException("north east");
-    }
-
-    return new Quadruple(sw, se, nw, ne);
   }
 
   @Override
@@ -736,18 +664,95 @@ public class Transformer {
     return result;
   }
 
-  private static class Quadruple {
+  private static class Interpol {
     protected final Parameter sw;
     protected final Parameter se;
     protected final Parameter nw;
     protected final Parameter ne;
 
-    private Quadruple(
+    private Interpol(
         final Parameter sw, final Parameter se, final Parameter nw, final Parameter ne) {
       this.sw = sw;
       this.se = se;
       this.nw = nw;
       this.ne = ne;
+    }
+
+    protected static Interpol of(
+        final Map<Integer, ? extends Parameter> parameter, final MeshCell cell)
+        throws ParameterNotFoundException {
+      int meshcode;
+
+      meshcode = cell.southWest.toMeshcode();
+      final Parameter sw = parameter.get(meshcode);
+      if (Objects.isNull(sw)) {
+        throw new ParameterNotFoundException("south west");
+      }
+
+      meshcode = cell.southEast.toMeshcode();
+      final Parameter se = parameter.get(meshcode);
+      if (Objects.isNull(se)) {
+        throw new ParameterNotFoundException("south east");
+      }
+
+      meshcode = cell.northWest.toMeshcode();
+      final Parameter nw = parameter.get(meshcode);
+      if (Objects.isNull(nw)) {
+        throw new ParameterNotFoundException("north west");
+      }
+
+      meshcode = cell.northEast.toMeshcode();
+      final Parameter ne = parameter.get(meshcode);
+      if (Objects.isNull(ne)) {
+        throw new ParameterNotFoundException("north east");
+      }
+
+      return new Interpol(sw, se, nw, ne);
+    }
+
+    private static double bilinearInterpolation(
+        final double sw,
+        final double se,
+        final double nw,
+        final double ne,
+        final double latitude,
+        final double longitude) {
+      return sw * (1.0 - longitude) * (1.0 - latitude)
+          + se * longitude * (1.0 - latitude)
+          + nw * (1.0 - longitude) * latitude
+          + ne * longitude * latitude;
+    }
+
+    private double latitude(final MeshCell.Position position, final double scale) {
+      return bilinearInterpolation(
+              this.sw.latitude,
+              this.se.latitude,
+              this.nw.latitude,
+              this.ne.latitude,
+              position.y,
+              position.x)
+          / scale;
+    }
+
+    private double longitude(final MeshCell.Position position, final double scale) {
+      return bilinearInterpolation(
+              this.sw.longitude,
+              this.se.longitude,
+              this.nw.longitude,
+              this.ne.longitude,
+              position.y,
+              position.x)
+          / scale;
+    }
+
+    private double altitude(final MeshCell.Position position) {
+      return bilinearInterpolation(
+          this.sw.altitude,
+          this.se.altitude,
+          this.nw.altitude,
+          this.ne.altitude,
+          position.y,
+          position.x);
     }
   }
 
