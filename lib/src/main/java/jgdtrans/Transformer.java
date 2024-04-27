@@ -219,19 +219,6 @@ public class Transformer {
     return new Builder();
   }
 
-  private static double bilinearInterpolation(
-      final double sw,
-      final double se,
-      final double nw,
-      final double ne,
-      final double latitude,
-      final double longitude) {
-    return sw * (1.0 - longitude) * (1.0 - latitude)
-        + se * longitude * (1.0 - latitude)
-        + nw * (1.0 - longitude) * latitude
-        + ne * longitude * latitude;
-  }
-
   /**
    * Returns the format.
    *
@@ -573,11 +560,11 @@ public class Transformer {
       final Interpol interpol = Interpol.of(this.parameter, cell);
       final MeshCell.Position position = cell.position(current);
 
-      final double corr_x = interpol.longitude(position, SCALE);
-      final double corr_y = interpol.latitude(position, SCALE);
+      final double drift_x = interpol.longitude(position, SCALE);
+      final double drift_y = interpol.latitude(position, SCALE);
 
-      final double fx = point.longitude - (xn + corr_x);
-      final double fy = point.latitude - (yn + corr_y);
+      final double fx = point.longitude - (xn + drift_x);
+      final double fy = point.latitude - (yn + drift_y);
 
       // fx_x, fx_y, fy_x, fy_y
 
@@ -624,7 +611,7 @@ public class Transformer {
   public String toString() {
     final Optional<String> description =
         Optional.ofNullable(this.description)
-            .map(s -> 13 < s.length() ? String.format("'%10s...'", s) : s)
+            .map(s -> String.format(13 < s.length() ? "\"%10s...\"" : "\"%13s\"", s))
             .map(s -> s.replace("\n", "\\n"));
     return String.format(
         "Transformer[format=%s, parameter=%s(%d entries), description=%s]",
