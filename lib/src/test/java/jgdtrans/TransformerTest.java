@@ -135,7 +135,7 @@ class TransformerTest {
     tf = Transformer.fromString(s, Format.TKY2JGD);
 
     assertEquals(Format.TKY2JGD, tf.format());
-    assertEquals(Optional.of("\n"), tf.description());
+    assertEquals(Optional.of("\n\n"), tf.description());
 
     m = new HashMap<>();
     m.put(12345678, new Parameter(0.00001, 0.00002, 0.0));
@@ -146,7 +146,7 @@ class TransformerTest {
     tf = Transformer.fromString(s, Format.TKY2JGD);
 
     assertEquals(Format.TKY2JGD, tf.format());
-    assertEquals(Optional.of("\n"), tf.description());
+    assertEquals(Optional.of("\n\n"), tf.description());
 
     m = new HashMap<>();
     m.put(12345678, new Parameter(0.00001, 0.00002, 0.0));
@@ -157,7 +157,7 @@ class TransformerTest {
     tf = Transformer.fromString(s, Format.TKY2JGD);
 
     assertEquals(Format.TKY2JGD, tf.format());
-    assertEquals(Optional.of("\n"), tf.description());
+    assertEquals(Optional.of("\n\n"), tf.description());
 
     m = new HashMap<>();
     m.put(12345678, new Parameter(0.00001, 0.00002, 0.0));
@@ -180,7 +180,7 @@ class TransformerTest {
     tf = Transformer.fromString(s, Format.TKY2JGD, null);
 
     assertEquals(Format.TKY2JGD, tf.format());
-    assertEquals(Optional.of("\n"), tf.description());
+    assertEquals(Optional.of("\n\n"), tf.description());
 
     m = new HashMap<>();
     m.put(12345678, new Parameter(0.00001, 0.00002, 0.0));
@@ -200,7 +200,7 @@ class TransformerTest {
     tf = Transformer.fromString(s, Format.PatchJGD);
 
     assertEquals(Format.PatchJGD, tf.format());
-    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
+    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
 
     m = new HashMap<>();
     m.put(12345678, new Parameter(0.00001, 0.00002, 0.0));
@@ -213,7 +213,7 @@ class TransformerTest {
     tf = Transformer.fromString(s, Format.PatchJGD);
 
     assertEquals(Format.PatchJGD, tf.format());
-    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
+    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
 
     m = new HashMap<>();
     m.put(12345678, new Parameter(0.00001, 0.00002, 0.0));
@@ -226,7 +226,7 @@ class TransformerTest {
     tf = Transformer.fromString(s, Format.PatchJGD);
 
     assertEquals(Format.PatchJGD, tf.format());
-    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
+    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
 
     m = new HashMap<>();
     m.put(12345678, new Parameter(0.00001, 0.00002, 0.0));
@@ -253,7 +253,7 @@ class TransformerTest {
     tf = Transformer.fromString(s, Format.PatchJGD, null);
 
     assertEquals(Format.PatchJGD, tf.format());
-    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
+    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
 
     m = new HashMap<>();
     m.put(12345678, new Parameter(0.00001, 0.00002, 0.0));
@@ -273,7 +273,7 @@ class TransformerTest {
     tf = Transformer.fromString(s, Format.PatchJGD_H);
 
     assertEquals(Format.PatchJGD_H, tf.format());
-    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
+    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
 
     m = new HashMap<>();
     m.put(12345678, new Parameter(0.0, 0.0, 0.00001));
@@ -286,7 +286,7 @@ class TransformerTest {
     tf = Transformer.fromString(s, Format.PatchJGD_H);
 
     assertEquals(Format.PatchJGD_H, tf.format());
-    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
+    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
 
     m = new HashMap<>();
     m.put(12345678, new Parameter(0.0, 0.0, 0.00001));
@@ -299,7 +299,7 @@ class TransformerTest {
     tf = Transformer.fromString(s, Format.PatchJGD_H);
 
     assertEquals(Format.PatchJGD_H, tf.format());
-    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
+    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
 
     m = new HashMap<>();
     m.put(12345678, new Parameter(0.0, 0.0, 0.00001));
@@ -326,7 +326,7 @@ class TransformerTest {
     tf = Transformer.fromString(s, Format.PatchJGD_H, null);
 
     assertEquals(Format.PatchJGD_H, tf.format());
-    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
+    assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), tf.description());
 
     m = new HashMap<>();
     m.put(12345678, new Parameter(0.0, 0.0, 0.00001));

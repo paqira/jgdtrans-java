@@ -143,7 +143,7 @@ class Parser {
       temp[i] = line;
     }
 
-    return String.join("\n", temp);
+    return String.join("\n", temp) + "\n";
   }
 
   protected TreeMap<Integer, Parameter> parameter(final BufferedReader reader)
