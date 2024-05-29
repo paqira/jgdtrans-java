@@ -24,11 +24,13 @@ jobs:
           cache: gradle
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-#     GJF does not support @snippet, see issues/886.
-#     Hence, check before code snippet patch.
+      # Google Java Formatter does not support `@snippet`.
+      # Hence, check before patch code snippets.
+      #
+      # See issues/886
       - name: Check
         run: gradle check
-      - name: Patch code snippet
+      - name: Patch (@snippet)
         run: |
           find lib/src/main/java -type f | xargs sed -i -e 's/<pre>{@code/{@snippet lang="java" :/'
           find lib/src/main/java -type f | xargs sed -i -e 's/<\/pre>//'
@@ -47,15 +49,18 @@ jobs:
           distribution: temurin
           java-version: 8
           cache: gradle
-      - name: Patch to support Java8
+      - name: Patch (support Java8)
         run: |
-          # FIXME: Better Patch
-          # Gradle of Github action does not use spotless@6.13.0 when
-          # `version = { require = "[6.13.0, 7.0.0[", prefer = "6.13.0" }`.
-          # Therefore, we patch `require` in addition to `prefer`
+          sed -i -e 's/JavaLanguageVersion.of(\d{1,2})/JavaLanguageVersion.of(8)/' lib/build.gradle.kts
+          cat lib/build.gradle.kts
+      # `prefer` does not work on `plugin`,
+      # thus we patch `libs.versions.toml`.
+      #
+      # See issues/27208
+      - name: Patch (issues/27208)
+        run: |
           sed -i -e 's/\[6.13.0, 7.0.0\[/6.13.0/' gradle/libs.versions.toml
           sed -i -e 's/latest.release/6.13.0/' gradle/libs.versions.toml
-          sed -i -e 's/JavaLanguageVersion.of(\d{1,2})/JavaLanguageVersion.of(8)/' lib/build.gradle.kts
           cat gradle/libs.versions.toml
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
