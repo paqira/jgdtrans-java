@@ -58,7 +58,7 @@ public class Transformer {
    * Max error of {@link Transformer#backward(Point)} and {@link
    * Transformer#backwardCorrection(Point)}
    */
-  public static final double ERROR_MAX = 5e-14;
+  public static final double MAX_ERROR = 5e-14;
 
   /** not null */
   private final Format format;
@@ -356,7 +356,7 @@ public class Transformer {
    * <p>The {@link Point#latitude()} should satisfy {@code 0.0 <=} and {@code <= 66.666...} and the
    * *{@link Point#longitude()} does {@code 100.0 <=} and {@code <= 180.0}.
    *
-   * <p>The result's error from an exact solution is suppressed under {@link Transformer#ERROR_MAX}.
+   * <p>The result's error from an exact solution is suppressed under {@link Transformer#MAX_ERROR}.
    *
    * <p>Notes, the error is less than 1e-9 [deg], which is error of GIAJ latitude and longitude
    * parameter. This implies that altitude's error is less than 1e-5 [m], which is error of the GIAJ
@@ -599,7 +599,7 @@ public class Transformer {
       final double delta_x = point.longitude - (xn + correction.longitude);
       final double delta_y = point.latitude - (yn + correction.latitude);
 
-      if (Math.abs(delta_x) < ERROR_MAX && Math.abs(delta_y) < ERROR_MAX) {
+      if (Math.abs(delta_x) < MAX_ERROR && Math.abs(delta_y) < MAX_ERROR) {
         return new Correction(-correction.latitude, -correction.longitude, -correction.altitude);
       }
     }
