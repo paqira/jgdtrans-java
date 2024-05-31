@@ -17,8 +17,8 @@ package jgdtrans;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Objects;
-import java.util.TreeMap;
 
 // FIXME: need better logic
 class Parser {
@@ -99,9 +99,9 @@ class Parser {
       final String substring = line.substring(range.start, range.stop);
       return Integer.parseUnsignedInt(substring.trim());
     } catch (final IndexOutOfBoundsException e) {
-      throw new ParseParException("meshcode not found, line " + lineNo, e);
+      throw new ParseParException(String.format("meshcode not found, line %d", lineNo), e);
     } catch (final NumberFormatException e) {
-      throw new ParseParException("invalid meshcode, line " + lineNo, e);
+      throw new ParseParException(String.format("invalid meshcode, line %d", lineNo), e);
     }
   }
 
@@ -115,9 +115,9 @@ class Parser {
         final String substring = line.substring(range.start, range.stop);
         return Double.parseDouble(substring.trim());
       } catch (final IndexOutOfBoundsException e) {
-        throw new ParseParException(name + " not found, line " + lineNo, e);
+        throw new ParseParException(String.format("%s not found, line %d", name, lineNo), e);
       } catch (final NumberFormatException e) {
-        throw new ParseParException("invalid " + name + ", line " + lineNo, e);
+        throw new ParseParException(String.format("invalid %s , line %d", name, lineNo), e);
       }
     }
   }
@@ -127,7 +127,7 @@ class Parser {
       throws IOException, ParseParException {
     final Parser parser = Parser.ofFormat(format);
     final String header = parser.header(reader);
-    final TreeMap<Integer, Parameter> parameter = parser.parameter(reader);
+    final HashMap<Integer, Parameter> parameter = parser.parameter(reader);
     return new Transformer(
         parser.format, parameter, Objects.isNull(description) ? header : description);
   }
@@ -146,12 +146,10 @@ class Parser {
     return String.join("\n", temp) + "\n";
   }
 
-  protected TreeMap<Integer, Parameter> parameter(final BufferedReader reader)
+  protected HashMap<Integer, Parameter> parameter(final BufferedReader reader)
       throws IOException, ParseParException {
     // make parameter
-    final TreeMap<Integer, Parameter> parameter = new TreeMap<>();
-
-    int lineNo = this.header + 1;
+    final HashMap<Integer, Parameter> parameter = new HashMap<>();
 
     // temp vars
     String line;
@@ -160,6 +158,7 @@ class Parser {
     double longitude;
     double altitude;
 
+    int lineNo = this.header + 1;
     while (Objects.nonNull(line = reader.readLine())) {
       meshcode = parseMeshcode(line, this.meshcode, lineNo);
       latitude = parseValue(line, this.latitude, "latitude", lineNo);
