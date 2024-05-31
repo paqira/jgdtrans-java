@@ -197,7 +197,7 @@ public class MeshCoord implements Comparable<MeshCoord> {
    * assert coord.first() == 1;
    * }</pre>
    *
-   * @return The first digit, {@code 0} to {@code 99}.
+   * @return The first digit, {@code 0} to {@code 99}, <strong>not null</strong>.
    */
   public int first() {
     return this.first;
@@ -213,7 +213,7 @@ public class MeshCoord implements Comparable<MeshCoord> {
    * assert coord.second() == 2;
    * }</pre>
    *
-   * @return The second digit, {@code 0} to {@code 7}.
+   * @return The second digit, {@code 0} to {@code 7}, <strong>not null</strong>.
    */
   public int second() {
     return this.second;
@@ -229,7 +229,7 @@ public class MeshCoord implements Comparable<MeshCoord> {
    * assert coord.third() == 3;
    * }</pre>
    *
-   * @return The third digit, {@code 0} to {@code 9}.
+   * @return The third digit, {@code 0} to {@code 9}, <strong>not null</strong>.
    */
   public int third() {
     return this.third;
@@ -424,7 +424,9 @@ public class MeshCoord implements Comparable<MeshCoord> {
 
   @Override
   public boolean equals(final Object o) {
-    if (o == this) return true;
+    if (o == this) {
+      return true;
+    }
     if (o instanceof MeshCoord) {
       final MeshCoord other = (MeshCoord) o;
       return this.first == other.first && this.second == other.second && this.third == other.third;

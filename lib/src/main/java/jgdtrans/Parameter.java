@@ -137,7 +137,9 @@ public class Parameter {
 
   @Override
   public boolean equals(final Object o) {
-    if (o == this) return true;
+    if (o == this) {
+      return true;
+    }
     if (o instanceof Parameter) {
       final Parameter other = (Parameter) o;
       return Double.compare(this.latitude, other.latitude) == 0

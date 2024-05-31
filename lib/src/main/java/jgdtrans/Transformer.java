@@ -623,7 +623,9 @@ public class Transformer {
 
   @Override
   public boolean equals(final Object o) {
-    if (o == this) return true;
+    if (o == this) {
+      return true;
+    }
     if (o instanceof Transformer) {
       final Transformer other = (Transformer) o;
       return Objects.equals(this.format, other.format)

@@ -262,7 +262,9 @@ public class MeshNode {
 
   @Override
   public boolean equals(final Object o) {
-    if (o == this) return true;
+    if (o == this) {
+      return true;
+    }
     if (o instanceof MeshNode) {
       final MeshNode other = (MeshNode) o;
       return Objects.equals(this.latitude, other.latitude)

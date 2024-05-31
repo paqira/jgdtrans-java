@@ -377,7 +377,9 @@ public class Point {
 
   @Override
   public boolean equals(final Object o) {
-    if (o == this) return true;
+    if (o == this) {
+      return true;
+    }
     if (o instanceof Point) {
       final Point other = (Point) o;
       return Double.compare(this.latitude, other.latitude) == 0

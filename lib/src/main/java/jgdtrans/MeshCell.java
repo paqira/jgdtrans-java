@@ -377,7 +377,9 @@ public class MeshCell {
 
   @Override
   public boolean equals(final Object o) {
-    if (o == this) return true;
+    if (o == this) {
+      return true;
+    }
     if (o instanceof MeshCell) {
       final MeshCell other = (MeshCell) o;
       return Objects.equals(this.meshUnit, other.meshUnit)
