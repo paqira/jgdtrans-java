@@ -438,7 +438,7 @@ public class Transformer {
     final MeshCell cell;
     try {
       cell = MeshCell.ofPoint(point, this.format.meshUnit());
-    } catch (final Exception e) {
+    } catch (final ValueOutOfRangeException | InvalidCellException | MeshCoordOverflowException e) {
       throw new PointOutOfRangeException(e);
     }
 
@@ -554,7 +554,9 @@ public class Transformer {
       final MeshCell cell;
       try {
         cell = MeshCell.ofPoint(current, this.format.meshUnit());
-      } catch (final Exception e) {
+      } catch (final ValueOutOfRangeException
+          | InvalidCellException
+          | MeshCoordOverflowException e) {
         throw new PointOutOfRangeException(e);
       }
       final Interpol interpol = Interpol.of(this.parameter, cell);
