@@ -269,6 +269,89 @@ class ParseTest {
   }
 
   @Nested
+  class PatchJGD_HV {
+    String s;
+    Transformer tf;
+    HashMap<Integer, Parameter> m;
+
+    @Test
+    void simple() throws ParseParException {
+      this.s =
+          Stream.generate(() -> "\n").limit(16L).collect(Collectors.joining())
+              + "00000000   0.00001   0.00002   0.00003";
+      this.tf = Transformer.fromString(this.s, Format.PatchJGD_HV);
+
+      assertEquals(Format.PatchJGD_HV, this.tf.format());
+      assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), this.tf.description());
+
+      this.m = new HashMap<>();
+      this.m.put(0, new Parameter(0.00001, 0.00002, 0.00003));
+      assertEquals(this.tf.parameter(), this.m);
+    }
+
+    @Test
+    void endsWithNewline() throws ParseParException {
+      this.s =
+          Stream.generate(() -> "\n").limit(16L).collect(Collectors.joining())
+              + "00000000   0.00001   0.00002   0.00003\n";
+      this.tf = Transformer.fromString(this.s, Format.PatchJGD_HV);
+
+      assertEquals(Format.PatchJGD_HV, this.tf.format());
+      assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), this.tf.description());
+
+      this.m = new HashMap<>();
+      this.m.put(0, new Parameter(0.00001, 0.00002, 0.00003));
+      assertEquals(this.m, this.tf.parameter());
+    }
+
+    @Test
+    void multiline() throws ParseParException {
+      this.s =
+          Stream.generate(() -> "\n").limit(16L).collect(Collectors.joining())
+              + "00000000   0.00001   0.00002   0.00003\n10000000 -10.00001 -10.00002 -10.00003";
+      this.tf = Transformer.fromString(this.s, Format.PatchJGD_HV);
+
+      assertEquals(Format.PatchJGD_HV, this.tf.format());
+      assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), this.tf.description());
+
+      this.m = new HashMap<>();
+      this.m.put(0, new Parameter(0.00001, 0.00002, 0.00003));
+      this.m.put(10000000, new Parameter(-10.00001, -10.00002, -10.00003));
+      assertEquals(this.tf.parameter(), this.m);
+    }
+
+    @Test
+    void withDescription() throws ParseParException {
+      this.s =
+          Stream.generate(() -> "\n").limit(16L).collect(Collectors.joining())
+              + "00000000   0.00001   0.00002   0.00003\n";
+      this.tf = Transformer.fromString(this.s, Format.PatchJGD_HV, "hi!");
+
+      assertEquals(Format.PatchJGD_HV, this.tf.format());
+      assertEquals(Optional.of("hi!"), this.tf.description());
+
+      this.m = new HashMap<>();
+      this.m.put(0, new Parameter(0.00001, 0.00002, 0.00003));
+      assertEquals(this.m, this.tf.parameter());
+    }
+
+    @Test
+    void withNullDescription() throws ParseParException {
+      this.s =
+          Stream.generate(() -> "\n").limit(16L).collect(Collectors.joining())
+              + "00000000   0.00001   0.00002   0.00003\n";
+      this.tf = Transformer.fromString(this.s, Format.PatchJGD_HV, null);
+
+      assertEquals(Format.PatchJGD_HV, this.tf.format());
+      assertEquals(Optional.of("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), this.tf.description());
+
+      this.m = new HashMap<>();
+      this.m.put(0, new Parameter(0.00001, 0.00002, 0.00003));
+      assertEquals(this.m, this.tf.parameter());
+    }
+  }
+
+  @Nested
   class HyokoRev {
     String s;
     Transformer tf;
