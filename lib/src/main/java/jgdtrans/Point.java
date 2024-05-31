@@ -375,20 +375,14 @@ public class Point {
         this.latitude, this.longitude, this.altitude);
   }
 
-  protected boolean canEqual(final Object other) {
-    return other instanceof Point;
-  }
-
   @Override
   public boolean equals(final Object o) {
     if (o == this) return true;
     if (o instanceof Point) {
       final Point other = (Point) o;
-      if (other.canEqual(this)) {
-        return Double.compare(this.latitude, other.latitude) == 0
-            && Double.compare(this.longitude, other.longitude) == 0
-            && Double.compare(this.altitude, other.altitude) == 0;
-      }
+      return Double.compare(this.latitude, other.latitude) == 0
+          && Double.compare(this.longitude, other.longitude) == 0
+          && Double.compare(this.altitude, other.altitude) == 0;
     }
     return false;
   }

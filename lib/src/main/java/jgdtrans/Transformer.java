@@ -621,20 +621,14 @@ public class Transformer {
         description);
   }
 
-  protected boolean canEqual(final Object other) {
-    return other instanceof Transformer;
-  }
-
   @Override
   public boolean equals(final Object o) {
     if (o == this) return true;
     if (o instanceof Transformer) {
       final Transformer other = (Transformer) o;
-      if (other.canEqual(this)) {
-        return Objects.equals(this.format, other.format)
-            && Objects.equals(this.description, other.description)
-            && Objects.equals(this.parameter, other.parameter);
-      }
+      return Objects.equals(this.format, other.format)
+          && Objects.equals(this.description, other.description)
+          && Objects.equals(this.parameter, other.parameter);
     }
     return false;
   }

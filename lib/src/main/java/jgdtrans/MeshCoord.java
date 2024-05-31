@@ -422,20 +422,12 @@ public class MeshCoord implements Comparable<MeshCoord> {
         "MeshCoord[first=%d, second=%d, third=%d]", this.first, this.second, this.third);
   }
 
-  protected boolean canEqual(final Object other) {
-    return other instanceof MeshCoord;
-  }
-
   @Override
   public boolean equals(final Object o) {
     if (o == this) return true;
     if (o instanceof MeshCoord) {
       final MeshCoord other = (MeshCoord) o;
-      if (other.canEqual(this)) {
-        return this.first == other.first
-            && this.second == other.second
-            && this.third == other.third;
-      }
+      return this.first == other.first && this.second == other.second && this.third == other.third;
     }
     return false;
   }

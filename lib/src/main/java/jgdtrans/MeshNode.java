@@ -260,19 +260,13 @@ public class MeshNode {
     return String.format("MeshNode[latitude=%s, longitude=%s]", this.latitude, this.longitude);
   }
 
-  protected boolean canEqual(final Object other) {
-    return other instanceof MeshNode;
-  }
-
   @Override
   public boolean equals(final Object o) {
     if (o == this) return true;
     if (o instanceof MeshNode) {
       final MeshNode other = (MeshNode) o;
-      if (other.canEqual(this)) {
-        return Objects.equals(this.latitude, other.latitude)
-            && Objects.equals(this.longitude, other.longitude);
-      }
+      return Objects.equals(this.latitude, other.latitude)
+          && Objects.equals(this.longitude, other.longitude);
     }
     return false;
   }

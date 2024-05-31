@@ -375,22 +375,16 @@ public class MeshCell {
         this.southWest, this.southEast, this.northWest, this.northEast, this.meshUnit);
   }
 
-  protected boolean canEqual(final Object other) {
-    return other instanceof MeshCell;
-  }
-
   @Override
   public boolean equals(final Object o) {
     if (o == this) return true;
     if (o instanceof MeshCell) {
       final MeshCell other = (MeshCell) o;
-      if (other.canEqual(this)) {
-        return Objects.equals(this.meshUnit, other.meshUnit)
-            && Objects.equals(this.southWest, other.southWest)
-            && Objects.equals(this.southEast, other.southEast)
-            && Objects.equals(this.northWest, other.northWest)
-            && Objects.equals(this.northEast, other.northEast);
-      }
+      return Objects.equals(this.meshUnit, other.meshUnit)
+          && Objects.equals(this.southWest, other.southWest)
+          && Objects.equals(this.southEast, other.southEast)
+          && Objects.equals(this.northWest, other.northWest)
+          && Objects.equals(this.northEast, other.northEast);
     }
     return false;
   }
