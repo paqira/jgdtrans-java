@@ -15,7 +15,7 @@
  */
 package jgdtrans.TransformerTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -29,6 +29,49 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 class ParseTest {
+  @Nested
+  class Error {
+    @Test
+    void header() {
+      // less header
+      assertThrows(ParseParException.class, () -> Transformer.fromString("\n", Format.TKY2JGD));
+    }
+
+    @Test
+    void invalidValue() {
+      assertThrows(
+          ParseParException.class,
+          () -> Transformer.fromString("\n\n1234a678   0.00001   0.00002", Format.TKY2JGD));
+      assertThrows(
+          ParseParException.class,
+          () -> Transformer.fromString("\n\n12345678   0.0000a   0.00002", Format.TKY2JGD));
+      assertThrows(
+          ParseParException.class,
+          () -> Transformer.fromString("\n\n1234a678   0.00001   0.0000a", Format.TKY2JGD));
+    }
+
+    @Test
+    void lessValue() {
+      assertThrows(
+          ParseParException.class, () -> Transformer.fromString("\n\n1234567", Format.TKY2JGD));
+      assertThrows(
+          ParseParException.class,
+          () -> Transformer.fromString("\n\n12345678   0.0000", Format.TKY2JGD));
+      assertThrows(
+          ParseParException.class,
+          () -> Transformer.fromString("\n\n12345678   0.00001   0.000", Format.TKY2JGD));
+    }
+  }
+
+  @Test
+  void emptyValue() throws ParseParException {
+    final Transformer tf = Transformer.fromString("\n\n", Format.TKY2JGD);
+
+    assertEquals(Format.TKY2JGD, tf.format());
+    assertEquals(Optional.of("\n\n"), tf.description());
+    assertEquals(tf.parameter(), new HashMap<>());
+  }
+
   @Nested
   class TKY2JGD {
     String s;
