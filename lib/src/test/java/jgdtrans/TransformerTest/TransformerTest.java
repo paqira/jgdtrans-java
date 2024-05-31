@@ -1,0 +1,122 @@
+/*
+ * Copyright 2024 Kentaro Tatsumi
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package jgdtrans.TransformerTest;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.HashMap;
+import jgdtrans.*;
+import org.junit.jupiter.api.Test;
+
+class TransformerTest {
+  @Test
+  void Tky2Jgd() throws ParameterNotFoundException {
+    // web
+    final HashMap<Integer, Parameter> m = new HashMap<>();
+    // forward
+    m.put(54401027, new Parameter(11.49105, -11.80078, 0.0));
+    m.put(54401037, new Parameter(11.48732, -11.80198, 0.0));
+    m.put(54401028, new Parameter(11.49096, -11.80476, 0.0));
+    m.put(54401038, new Parameter(11.48769, -11.80555, 0.0));
+    // backward
+    m.put(54401047, new Parameter(11.48373, -11.80318, 0.0));
+    m.put(54401048, new Parameter(11.48438, -11.80689, 0.0));
+    final Transformer tf = new Transformer(Format.TKY2JGD, m);
+
+    Point actual;
+    Point origin;
+
+    origin = new Point(36.103774791666666, 140.08785504166664, 0);
+    actual = tf.forward(origin);
+    assertEquals(36.106966281, actual.latitude(), 0.00000001);
+    assertEquals(140.084576867, actual.longitude(), 0.00000001);
+    assertEquals(0.0, actual.altitude());
+
+    origin = new Point(36.10696628160147, 140.08457686629436, 0.0);
+    actual = tf.backwardCompat(origin);
+    assertEquals(36.103774792, actual.latitude(), 0.00000001);
+    assertEquals(140.087855042, actual.longitude(), 0.00000001);
+    assertEquals(0.0, actual.altitude());
+  }
+
+  @Test
+  void PatchJGD_HV() throws ParameterNotFoundException {
+    // web
+    final HashMap<Integer, Parameter> m = new HashMap<>();
+    // forward
+    m.put(57413454, new Parameter(-0.05984, 0.22393, -1.25445));
+    m.put(57413464, new Parameter(-0.06011, 0.22417, -1.24845));
+    m.put(57413455, new Parameter(-0.0604, 0.2252, -1.29));
+    m.put(57413465, new Parameter(-0.06064, 0.22523, -1.27667));
+    // backward
+    m.put(57413474, new Parameter(-0.06037, 0.22424, -0.35308));
+    m.put(57413475, new Parameter(-0.06089, 0.22524, 0.0));
+    final Transformer tf = new Transformer(Format.PatchJGD_HV, m);
+
+    Point actual;
+    Point origin;
+
+    origin = new Point(38.2985120586605, 141.5559006163195, 0.0);
+    actual = tf.forward(origin);
+    assertEquals(38.298495306, actual.latitude(), 0.00000001);
+    assertEquals(141.555963019, actual.longitude(), 0.00000001);
+    assertEquals(-1.263, actual.altitude(), 0.001);
+
+    origin = new Point(38.29849530463122, 141.55596301776936, 0.0);
+    actual = tf.backwardCompat(origin);
+    assertEquals(38.298512058, actual.latitude(), 0.00000001);
+    assertEquals(141.555900614, actual.longitude(), 0.00000001);
+    assertEquals(1.264, actual.altitude(), 0.001);
+  }
+
+  @Test
+  void SemiDynaEXE() throws ParameterNotFoundException {
+    final HashMap<Integer, Parameter> m = new HashMap<>();
+    m.put(54401005, new Parameter(-0.00622, 0.01516, 0.0946));
+    m.put(54401055, new Parameter(-0.0062, 0.01529, 0.08972));
+    m.put(54401100, new Parameter(-0.00663, 0.01492, 0.10374));
+    m.put(54401150, new Parameter(-0.00664, 0.01506, 0.10087));
+    final Transformer tf = new Transformer(Format.SemiDynaEXE, m);
+
+    Point actual;
+    Point origin;
+
+    // web
+    origin = new Point(36.103774791666666, 140.08785504166664, 0.0);
+    actual = tf.forward(origin);
+    assertEquals(36.103773019, actual.latitude(), 0.00000001);
+    assertEquals(140.087859244, actual.longitude(), 0.00000001);
+    assertEquals(0.096, actual.altitude(), 0.001);
+
+    origin = new Point(36.10377301875336, 140.08785924400115, 0.0);
+    actual = tf.backwardCompat(origin);
+    assertEquals(36.103774792, actual.latitude(), 0.00000001);
+    assertEquals(140.087855042, actual.longitude(), 0.00000001);
+    assertEquals(-0.096, actual.altitude(), 0.001);
+
+    // exact by Decimal
+    origin = new Point(36.103774791666666, 140.08785504166664, 0.0);
+    actual = tf.forward(origin);
+    assertEquals(36.10377301875335, actual.latitude(), 0.000000000001);
+    assertEquals(140.08785924400115, actual.longitude(), 0.000000000001);
+    assertEquals(0.09631385775572238, actual.altitude(), 0.000000000001);
+
+    actual = tf.backwardCompat(actual);
+    assertEquals(36.10377479166668, actual.latitude(), 0.000000000001);
+    assertEquals(140.08785504166664, actual.longitude(), 0.000000000001);
+    assertEquals(-4.2175864502150125955e-10, actual.altitude(), 0.000000000001);
+  }
+}
