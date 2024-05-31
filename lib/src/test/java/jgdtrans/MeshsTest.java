@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 
 public class MeshsTest {
   @Test
-  void constructor() {
+  void isMeshcode() {
     assertTrue(Meshes.isMeshcode(54401027));
     assertFalse(Meshes.isMeshcode(-1));
     assertFalse(Meshes.isMeshcode(100000000));
