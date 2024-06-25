@@ -9,6 +9,8 @@
 plugins {
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
+    `maven-publish`
+    signing
 
     alias(libs.plugins.spotless)
 }
@@ -25,17 +27,6 @@ repositories {
 dependencies {
 }
 
-testing {
-    suites {
-        // Configure the built-in test suite
-        val test by getting(JvmTestSuite::class) {
-            // Use JUnit Jupiter test framework
-            useJUnitJupiter("5.10.2")
-        }
-    }
-}
-
-// Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
@@ -49,6 +40,56 @@ tasks.javadoc {
     options.memberLevel = JavadocMemberLevel.PUBLIC
     title = "${rootProject.name} $version API"
     (options as StandardJavadocDocletOptions).header = "${rootProject.name} $version"
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            pom {
+                name = "jgdtrans"
+                description = "Coordinate Transformer by Gridded Correction Parameter (par file)"
+                url = "https://github.com/paqira/jgdtrans-java"
+                licenses {
+                    license {
+                        name = "Apache-2.0"
+                        url = "https://spdx.org/licenses/Apache-2.0.html"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "paqira"
+                        name = "Kentaro Tatsumi"
+                        email = "paqira.2019@gmail.com"
+                    }
+                }
+                scm {
+                    connection = "scm:git:git://github.com/paqira/jgdtrans-java.git"
+                    developerConnection = "scm:git:ssh://github.com:paqira/jgdtrans-java.git"
+                    url = "https://github.com/paqira/jgdtrans-java/tree/main"
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url = uri(layout.buildDirectory.dir("staging-deploy"))
+        }
+    }
+}
+
+signing {
+    sign(publishing.publications["mavenJava"])
+}
+
+testing {
+    suites {
+        // Configure the built-in test suite
+        val test by getting(JvmTestSuite::class) {
+            // Use JUnit Jupiter test framework
+            useJUnitJupiter("5.10.2")
+        }
+    }
 }
 
 spotless {
