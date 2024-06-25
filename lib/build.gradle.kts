@@ -15,7 +15,7 @@ plugins {
     alias(libs.plugins.spotless)
 }
 
-group = "paqira"
+group = "io.github.paqira"
 base.archivesName.set(rootProject.name)
 version = "0.1.0"
 

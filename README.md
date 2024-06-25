@@ -48,7 +48,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-import paqira.jgdtrans.*;
+import io.github.paqira.paqira.jgdtrans.*;
 
 public class Main {
     public static void main(String[] args)
