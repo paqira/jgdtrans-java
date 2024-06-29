@@ -40,6 +40,14 @@ jobs:
         run: gradle assemble
       - name: Test
         run: gradle test
+      # Upload html etc.
+      - name: Make .nojekyll
+        if: startsWith(github.event.ref, 'refs/tags/v')
+        run: touch lib/build/docs/javadoc/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        if: startsWith(github.event.ref, 'refs/tags/v')
+        with:
+          path: lib/build/docs/javadoc/
   java8:
     runs-on: ubuntu-latest
     steps:
@@ -70,6 +78,7 @@ jobs:
         run: gradle jar
       - name: Test
         run: gradle test
+      # upload builds
       - name: gradle publish
         if: startsWith(github.event.ref, 'refs/tags/v')
         env:
@@ -89,3 +98,17 @@ jobs:
           path: |
             lib/build/staging-deploy/jgdtrans-${{ github.ref_name }}.zip
             lib/build/staging-deploy/**/*.jar
+  deploy-github-pages:
+    needs: build
+    if: startsWith(github.event.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment
