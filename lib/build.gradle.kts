@@ -45,6 +45,7 @@ tasks.javadoc {
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
+            artifactId = rootProject.name
             from(components["java"])
             pom {
                 name = "jgdtrans"
