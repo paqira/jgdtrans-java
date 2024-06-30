@@ -49,7 +49,7 @@
  * import java.io.Files;
  * import java.nio.charset.StandardCharsets;
  *
- * import io.github.paqira.jgdtrans.*;
+ * import jgdtrans.*;
  *
  * public class Main {
  *     public static void main(String[] args)
