@@ -1,0 +1,47 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: CheckOut
+        uses: actions/checkout@v4
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      # Google Java Formatter does not support `@snippet`.
+      # Hence, check before patch code snippets.
+      #
+      # See issues/886
+      - name: Patch (@snippet)
+        run: |
+          find lib/src/main/java -type f | xargs sed -i -e 's/<pre>{@code/{@snippet lang="java" :/'
+          find lib/src/main/java -type f | xargs sed -i -e 's/<\/pre>//'
+      - name: Build javadoc
+        run: gradle javadoc
+      - name: Make .nojekyll
+        run: touch lib/build/docs/javadoc/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: lib/build/docs/javadoc/
+      - uses: actions/deploy-pages@v4
+        id: deployment
