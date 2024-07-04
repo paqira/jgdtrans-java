@@ -40,6 +40,12 @@ jobs:
         run: gradle assemble
       - name: Test
         run: gradle test
+      - name: Upload javadoc
+        if: startsWith(github.event.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v4
+        with:
+          name: javadoc
+          path: lib/build/docs/javadoc/
   java8:
     runs-on: ubuntu-latest
     steps:
@@ -77,16 +83,54 @@ jobs:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_SECRET_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_SECRET_KEY_PASSWORD }}
         run: gradle publish
-      - name: zip
+      - name: Zip Artifact
         if: startsWith(github.event.ref, 'refs/tags/v')
         run: |
           cd lib/build/staging-deploy/
           zip -r jgdtrans-${{ github.ref_name }}.zip .
-      - name: Upload
-        uses: actions/upload-artifact@v4
+      - name: Upload artifact
         if: startsWith(github.event.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v4
         with:
           name: artifact
           path: |
             lib/build/staging-deploy/jgdtrans-${{ github.ref_name }}.zip
             lib/build/staging-deploy/**/*.jar
+  release:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [ build, java8 ]
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: artifact
+          path: artifact/
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: gh release create '${{ github.ref_name }}' artifact/**/*.zip artifact/**/*.jar --draft --title 'Release ${{ github.ref_name }}' --notes ""
+  deploy-gitHub-pages:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [ build, java8 ]
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: Download javadoc
+        uses: actions/download-artifact@v4
+        with:
+          name: javadoc
+          path: javadoc/
+      - name: Upload javadoc
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: javadoc/
+      - name: Deploy GitHub Pages
+        uses: actions/deploy-pages@v4
+        id: deployment
