@@ -68,12 +68,12 @@
  *         System.out.println(result);
  *
  *         // backward transformation
- *         Point p = tf.backwardSafe(result);
+ *         Point p = tf.backward(result);
  *         // prints Point[latitude=36.10377479, longitude=140.087855041, altitude=2.34]
  *         System.out.println(p);
  *
  *         // backward transformation compatible to GIAJ web app/APIs
- *         Point p = tf.backward(result);
+ *         Point p = tf.backwardCompat(result);
  *         // prints Point[latitude=36.10377479000002, longitude=140.087855041, altitude=2.339999999578243]
  *         System.out.println(p);
  *     }
