@@ -1,8 +1,8 @@
 # jgdtrans for Java
 
-[![Maven Central Version](https://img.shields.io/maven-central/v/io.github.paqira/jgdtrans)](https://central.sonatype.com/artifact/io.github.paqira/jgdtrans)
+[![Maven Central Version](https://img.shields.io/maven-central/v/io.github.paqira/jgdtrans?logo=java)](https://mvnrepository.com/artifact/io.github.paqira/jgdtrans)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/paqira/jgdtrans-java/ci.yaml?logo=GitHub)
-[![Static Badge](https://img.shields.io/badge/doc-passing-default?logo=java)](https://paqira.github.io/jgdtrans-java/)
+[![Static Badge](https://img.shields.io/badge/doc-passing-default?logo=GitHub)](https://paqira.github.io/jgdtrans-java/)
 ![GitHub License](https://img.shields.io/github/license/paqira/jgdtrans-java)
 
 Unofficial coordinate transformer by _Gridded Correction Parameter_
